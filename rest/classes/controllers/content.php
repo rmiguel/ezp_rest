@@ -12,7 +12,10 @@
 class ezpRestContentController extends ezcMvcController
 {
 
-    public function doList()
+    /**
+     * @return ezcMvcResult
+     */
+    public function doViewNode( $nodeId )
     {
         $result = new ezcMvcResult();
         $result->variables['content'] = "This is the content, baby.";
@@ -20,14 +23,12 @@ class ezpRestContentController extends ezcMvcController
         return $result;
     }
 
-    public function doDisplay()
+    public function doViewObject()
     {
     }
 
-    public function doFields()
+    public function doViewFields( $contentId )
     {
-        // $demoNode = eZContentObjectTreeNode::fetch( $this->contentId );
-
         $result = new ezcMvcResult();
         $result->variables['content'] = "These are the fields, baby.";
         // $result->variables['payload'] = $demoNode;
