@@ -21,6 +21,7 @@ class ezpRestContentController extends ezcMvcController
             $content = ezpContent::fromNodeId( $nodeId );
         } catch( Exception $e ) {
             // @todo handle error
+            die( $e->getMessage() );
         }
 
         return $this->viewContent( $content );
@@ -32,17 +33,26 @@ class ezpRestContentController extends ezcMvcController
             $content = ezpContent::fromObjectId( $objectId );
         } catch( Exception $e ) {
             // @todo handle error
+            die( $e->getMessage() );
         }
 
         return $this->viewContent( $content );
     }
 
-    public function doViewFields( $contentId )
+    public function doViewFields( $objectId )
     {
-        $result = new ezcMvcResult();
-        $result->variables['content'] = "These are the fields, baby.";
-        // $result->variables['payload'] = $demoNode;
-        // var_dump( __METHOD__, $this );
+        try {
+            $content = ezpContent::fromObjectId( $objectId );
+        } catch( Exception $e ) {
+            // @todo handle error
+            die( $e->getMessage() );
+        }
+
+        $result = new ezcMvcResult;
+        foreach( $content->fields as $name => $field )
+        {
+            $result->variables[$name] = (string)$field; // this spits either an array or an object
+        }
         return $result;
     }
 
