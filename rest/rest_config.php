@@ -8,7 +8,9 @@
  * @package rest
  */
 
-require '../autoload.php';
 
+$root = "INSERT DIRNAME HERE";
+
+require $root . '/autoload.php';
 
 ?>

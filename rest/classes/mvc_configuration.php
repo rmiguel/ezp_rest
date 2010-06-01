@@ -7,6 +7,55 @@
  */
 class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 {
-    
+    public function createFatalRedirectRequest( ezcMvcRequest $request, ezcMvcResult $result, Exception $e )
+    {
+        $req = clone $request;
+        $req->uri = '/api/fatal';
+        $req->variables['message'] = $e->getMessage();
+        $req->variables['stackTrace'] = xdebug_get_function_stack();
+        return $req;
+    }
+
+    public function createRequestParser()
+    {
+        return new ezcMvcHttpRequestParser();
+    }
+
+    public function createResponseWriter( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result, ezcMvcResponse $response )
+    {
+        return new ezcMvcHttpResponseWriter( $response );
+    }
+
+    public function createRouter( ezcMvcRequest $request )
+    {
+        return new ezpRestRouter( $request );
+    }
+
+    public function createView( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result )
+    {
+        $view = new ezpRestDemoView( $request, $result );
+        return $view;
+    }
+
+    public function runPreRoutingFilters( ezcMvcRequest $request )
+    {
+
+    }
+
+    public function runRequestFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request )
+    {
+
+    }
+
+    public function runResponseFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result, ezcMvcResponse $response )
+    {
+
+    }
+
+    public function runResultFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result )
+    {
+
+    }
+
 }
 ?>

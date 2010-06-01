@@ -12,19 +12,35 @@
 class ezpRestContentController extends ezcMvcController
 {
 
-    public function doList( $rootNodeId = false )
+    public function doList()
     {
-
+        $result = new ezcMvcResult();
+        $result->variables['content'] = "This is the content, baby.";
+        // var_dump( __METHOD__, $this );
+        return $result;
     }
 
-    public function doDisplay( $contentId )
+    public function doDisplay()
     {
-
     }
 
-    public function doFields( $contentId )
+    public function doFields()
     {
+        // $demoNode = eZContentObjectTreeNode::fetch( $this->contentId );
 
+        $result = new ezcMvcResult();
+        $result->variables['content'] = "These are the fields, baby.";
+        // $result->variables['payload'] = $demoNode;
+        // var_dump( __METHOD__, $this );
+        return $result;
+    }
+
+    public function doShow()
+    {
+        $result = new ezcMvcResult;
+        $result->variables['message'] = $this->message;
+        $result->variables['stackTrace'] = $this->stackTrace;
+        return $result;
     }
 }
 ?>
