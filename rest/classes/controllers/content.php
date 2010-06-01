@@ -17,14 +17,24 @@ class ezpRestContentController extends ezcMvcController
      */
     public function doViewNode( $nodeId )
     {
-        $result = new ezcMvcResult();
-        $result->variables['content'] = "This is the content, baby.";
-        // var_dump( __METHOD__, $this );
-        return $result;
+        try {
+            $content = ezpContent::fromNodeId( $nodeId );
+        } catch( Exception $e ) {
+            // @todo handle error
+        }
+
+        return $this->viewContent( $content );
     }
 
-    public function doViewObject()
+    public function doViewObject( $objectId )
     {
+        try {
+            $content = ezpContent::fromObjectId( $objectId );
+        } catch( Exception $e ) {
+            // @todo handle error
+        }
+
+        return $this->viewContent( $content );
     }
 
     public function doViewFields( $contentId )
@@ -41,6 +51,21 @@ class ezpRestContentController extends ezcMvcController
         $result = new ezcMvcResult;
         $result->variables['message'] = $this->message;
         $result->variables['stackTrace'] = $this->stackTrace;
+        return $result;
+    }
+
+    /**
+     * Returns an ezcMvcResult that represents a piece of content
+     * @return ezcMvcResult
+     */
+    protected function viewContent( ezpContent $content )
+    {
+        $result = new ezcMvcResult;
+        $result->variables['classIdentifier'] = $content->classIdentifier;
+        $result->variables['objectName'] = $content->name;
+        $result->variables['published'] = $content->datePublished;
+        $result->variables['modified'] = $content->dateModified;
+
         return $result;
     }
 }
