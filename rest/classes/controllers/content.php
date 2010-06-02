@@ -72,45 +72,7 @@ class ezpRestContentController extends ezcMvcController
         $returnFields = array();
         foreach( $content->fields as $name => $field )
         {
-            // $fields[$name] = (string)$field; // this spand its either an array or an object
-            $sXml = simplexml_import_dom( $field->serializedXML );
-
-            $attributeType = (string)$sXml['type'];
-
-            // get ezremote NS elements in order to get the attribute identifier
-            $ezremoteAttributes = $sXml->attributes( 'http://ez.no/ezobject' );
-            $attributeIdentifier = (string)$ezremoteAttributes['identifier'];
-
-            // attribute value
-            $children = $sXml->children();
-            $attributeValue = array();
-            foreach( $children as $child )
-            {
-                // simple value
-                if ( count( $child->children() ) == 0 )
-                {
-                    // complex value, probably a native eZ Publish XML
-                    $attributeValue[$child->getName()] = (string)$child;
-                }
-                else
-                {
-                    // complex attribute, skip for now
-                }
-            }
-
-            // cleanup values so that the result is consistent:
-            // - no array if one item
-            // false if no values
-            if ( count( $attributeValue ) == 0 )
-                $attributeValue = false;
-            elseif ( count( $attributeValue ) == 1 )
-                $attributeValue = current( $attributeValue );
-
-            $returnFields[$name] = array(
-                'type'       => $attributeType,
-                'identifier' => $attributeIdentifier,
-                'value'      => $attributeValue,
-            );
+            $returnFields[$name] = $this->attributeOutputData( $field );
         }
         $result->variables['fields'] = $returnFields;
         return $result;
@@ -125,6 +87,36 @@ class ezpRestContentController extends ezcMvcController
         $result = new ezcMvcResult;
         $result->variables['message'] = $this->message;
         $result->variables['stackTrace'] = $this->stackTrace;
+        return $result;
+    }
+
+    /**
+     * Handles a content unique field request through an object ID
+     * @param int $objectId
+     * @param string $fieldReference
+     * @return ezcMvcResult
+     */
+    public function doViewField( $objectId, $fieldReference )
+    {
+        try {
+            $content = ezpContent::fromObjectId( $objectId );
+        } catch( Exception $e ) {
+            // @todo handle error
+            die( $e->getMessage() );
+        }
+
+        if ( !isset( $content->fields->$fieldReference ) )
+        {
+            // @todo Handle error
+            return false;
+        }
+
+        // object metadata
+        $result = self::viewContent( $content );
+
+        // fieldd data
+        $result->variables['fields'][$fieldReference] = $this->attributeOutputData( $content->fields->$fieldReference );
+
         return $result;
     }
 
@@ -150,6 +142,52 @@ class ezpRestContentController extends ezcMvcController
         $result->variables['links'] = $resourceLinks;
 
         return $result;
+    }
+
+    /**
+     * Transforms an ezpContentField in an array representation
+     * @todo Refactor, this doesn't really belong here. Either in ezpContentField, or in an extend class
+     */
+    protected function attributeOutputData( ezpContentField $attribute )
+    {
+        $sXml = simplexml_import_dom( $attribute->serializedXML );
+
+        $attributeType = (string)$sXml['type'];
+
+        // get ezremote NS elements in order to get the attribute identifier
+        $ezremoteAttributes = $sXml->attributes( 'http://ez.no/ezobject' );
+        $attributeIdentifier = (string)$ezremoteAttributes['identifier'];
+
+        // attribute value
+        $children = $sXml->children();
+        $attributeValue = array();
+        foreach( $children as $child )
+        {
+            // simple value
+            if ( count( $child->children() ) == 0 )
+            {
+                // complex value, probably a native eZ Publish XML
+                $attributeValue[$child->getName()] = (string)$child;
+            }
+            else
+            {
+                // complex attribute, skip for now
+            }
+        }
+
+        // cleanup values so that the result is consistent:
+        // - no array if one item
+        // - false if no values
+        if ( count( $attributeValue ) == 0 )
+            $attributeValue = false;
+        elseif ( count( $attributeValue ) == 1 )
+            $attributeValue = current( $attributeValue );
+
+        return array(
+            'type'       => $attributeType,
+            'identifier' => $attributeIdentifier,
+            'value'      => $attributeValue,
+        );
     }
 }
 ?>
