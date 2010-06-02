@@ -28,7 +28,13 @@ class ezpRestContentController extends ezcMvcController
             die( $e->getMessage() );
         }
 
-        return $this->viewContent( $content );
+        // object data
+        $result = $this->viewContent( $content );
+
+        // Add links to fields resources
+        $result->variables['links'] = $this->fieldsLinks( $content );
+
+        return $result;
     }
 
     /**
@@ -47,7 +53,30 @@ class ezpRestContentController extends ezcMvcController
             die( $e->getMessage() );
         }
 
-        return $this->viewContent( $content );
+        $result = $this->viewContent( $content );
+
+        // Add links to fields resources
+        $result->variables['links'] = $this->fieldsLinks( $content );
+
+        return $result;
+    }
+
+    /**
+     * Generates links to fields request URIs
+     * @param ezpContent $content
+     * @return array
+     */
+     public function fieldsLinks( ezpContent $content)
+     {
+         $links = array();
+         $baseUri = "{$this->request->protocol}://{$this->request->host}{$this->request->uri}";
+         foreach( $content->fields as $fieldName => $fieldValue )
+         {
+             $links[$fieldName] = "$baseUri/field/$fieldName";
+         }
+         $links['__fat'] = "$baseUri/fields";
+
+         return $links;
     }
 
     /**
