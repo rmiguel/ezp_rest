@@ -203,7 +203,7 @@ class ezpRestContentController extends ezcMvcController
                 if ( $attributeType == 'ezxmltext' )
                 {
                     $html = $attribute->content->attribute( 'output' )->attribute( 'output_text' );
-                    $attributeValue = strip_tags( $html );
+                    $attributeValue = array( strip_tags( $html ) );
                 }
             }
         }
