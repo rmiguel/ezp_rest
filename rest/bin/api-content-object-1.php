@@ -11,7 +11,7 @@ $request->host = 'api.example.no';
 
 $request->variables['objectId'] = 1;
 
-$controller = new ezpRestContentController( 'viewObject', $request );
-$result = $controller->doViewObject();
+$controller = new ezpRestContentController( 'viewContent', $request );
+$result = $controller->doViewContent();
 print_r( $result );
 ?>

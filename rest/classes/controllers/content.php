@@ -13,16 +13,19 @@ class ezpRestContentController extends ezcMvcController
 {
 
     /**
-     * Handles a content request per node ID
+     * Handles content requests per node or object ID
      * Request: GET /api/content/node/XXX
+     * Request: GET /api/content/object/XXX
      *
-     * @param int $nodeId Numerical eZContentObjectTreeNode id
      * @return ezcMvcResult
      */
-    public function doViewNode()
+    public function doViewContent()
     {
         try {
-            $content = ezpContent::fromNodeId( $this->nodeId );
+            if ( isset( $this->nodeId ) )
+                $content = ezpContent::fromNodeId( $this->nodeId );
+            elseif ( isset( $this->objectId ) )
+                $content = ezpContent::fromObjectId( $this->objectId );
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
@@ -38,36 +41,12 @@ class ezpRestContentController extends ezcMvcController
     }
 
     /**
-     * Handles a content request per object ID
-     * Request: GET /api/content/object/XXX
-     *
-     * @param int $objectId Numerical eZContentObject id
-     * @return ezcMvcResult
-     */
-    public function doViewObject()
-    {
-        try {
-            $content = ezpContent::fromObjectId( $this->objectId );
-        } catch( Exception $e ) {
-            // @todo handle error
-            die( $e->getMessage() );
-        }
-
-        $result = $this->viewContent( $content );
-
-        // Add links to fields resources
-        $result->variables['links'] = $this->fieldsLinks( $content );
-
-        return $result;
-    }
-
-    /**
      * Generates links to fields request URIs
      * @param ezpContent $content
      * @return array
      */
-     public function fieldsLinks( ezpContent $content)
-     {
+    public function fieldsLinks( ezpContent $content)
+    {
          $links = array();
          $baseUri = "{$this->request->protocol}://{$this->request->host}{$this->request->uri}";
          foreach( $content->fields as $fieldName => $fieldValue )
@@ -80,16 +59,23 @@ class ezpRestContentController extends ezcMvcController
     }
 
     /**
-     * Handles a content request with fields per object Id
+     * Handles a content request with fields per object or node id
      * Request: GET /api/content/object/XXX/fields
+     * Request: GET /api/content/node/XXX/fields
      *
-     * @param int $objectId Numerical eZContentObjectId
      * @return ezcMvcResult
      */
     public function doViewFields()
     {
         try {
-            $content = ezpContent::fromObjectId( $this->objectId );
+            if ( isset( $this->nodeId ) )
+            {
+                $content = ezpContent::fromNodeId( $this->nodeId );
+            }
+            elseif ( isset( $this->objectId ) )
+            {
+                $content = ezpContent::fromObjectId( $this->objectId );
+            }
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
@@ -120,21 +106,27 @@ class ezpRestContentController extends ezcMvcController
     }
 
     /**
-     * Handles a content unique field request through an object ID
-     * @param int $objectId
-     * @param string $fieldReference
+     * Handles a content unique field request through an object or node ID
+     *
+     * Requests:
+     * - GET /api/content/node/:nodeId/field/:fieldIdentifier
+     * - GET /api/content/object/:objectId/field/:fieldIdentifier
+     *
      * @return ezcMvcResult
      */
     public function doViewField()
     {
         try {
-            $content = ezpContent::fromObjectId( $this->objectId );
+            if ( isset( $this->nodeId ) )
+                $content = ezpContent::fromNodeId( $this->nodeId );
+            elseif ( isset( $this->objectId ) )
+                $content = ezpContent::fromObjectId( $this->objectId );
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
         }
 
-        if ( !isset( $content->fields->{$this->fieldReference} ) )
+        if ( !isset( $content->fields->{$this->fieldIdentifier} ) )
         {
             // @todo Handle error
             return false;
@@ -144,7 +136,7 @@ class ezpRestContentController extends ezcMvcController
         $result = self::viewContent( $content );
 
         // fieldd data
-        $result->variables['fields'][$this->fieldReference] = $this->attributeOutputData( $content->fields->{$this->fieldReference} );
+        $result->variables['fields'][$this->fieldIdentifier] = $this->attributeOutputData( $content->fields->{$this->fieldIdentifier} );
 
         return $result;
     }

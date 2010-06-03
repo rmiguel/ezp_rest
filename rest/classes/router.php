@@ -12,10 +12,12 @@ class ezpRestRouter extends ezcMvcRouter
     {
         return array(
             new ezcMvcRailsRoute( '/api/content', 'ezpRestContentController', 'list' ),
-            new ezcMvcRailsRoute( '/api/content/node/:nodeId', 'ezpRestContentController', 'viewNode' ),
-            new ezcMvcRailsRoute( '/api/content/object/:objectId', 'ezpRestContentController', 'viewObject' ),
+            new ezcMvcRailsRoute( '/api/content/node/:nodeId', 'ezpRestContentController', 'viewContent' ),
+            new ezcMvcRailsRoute( '/api/content/node/:nodeId/fields', 'ezpRestContentController', 'viewFields' ),
+            new ezcMvcRailsRoute( '/api/content/node/:nodeId/field/:fieldIdentifier', 'ezpRestContentController', 'viewField' ),
+            new ezcMvcRailsRoute( '/api/content/object/:objectId', 'ezpRestContentController', 'viewContent' ),
             new ezcMvcRailsRoute( '/api/content/object/:objectId/fields', 'ezpRestContentController', 'viewFields' ),
-            new ezcMvcRailsRoute( '/api/content/object/:objectId/field/:fieldReference', 'ezpRestContentController', 'viewField' ),
+            new ezcMvcRailsRoute( '/api/content/object/:objectId/field/:fieldIdentifier', 'ezpRestContentController', 'viewField' ),
             new ezcMvcRailsRoute( '/api/fatal', 'ezpRestContentController', 'show' ),
         );
     }

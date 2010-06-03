@@ -5,13 +5,14 @@
  */
 $request = new ezcMvcRequest();
 $request->date = new DateTime;
-$request->uri = '/api/content/object/1/field/name';
+$request->uri = '/api/content/node/2/field/name';
 $request->protocol = 'http';
 $request->host = 'api.example.no';
 
 $request->variables['nodeId'] = 2;
+$request->variables['fieldIdentifier'] = 'name';
 
-$controller = new ezpRestContentController( 'viewContent', $request );
-$result = $controller->doViewContent();
+$controller = new ezpRestContentController( 'viewField', $request );
+$result = $controller->doViewField();
 print_r( $result );
 ?>
