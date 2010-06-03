@@ -3,9 +3,15 @@
  * Crude bin test script
  * Simulates GET /api/content/node/2 and outputs the ezcMvcResult
  */
-$request = new ezcMvcRequest( new DateTime, 'http', 'api.example.no', '/api/content/object/1/field/name' );
+$request = new ezcMvcRequest();
+$request->date = new DateTime;
+$request->uri = '/api/content/object/1/field/name';
+$request->protocol = 'http';
+$request->host = 'api.example.no';
+$request->variables['objectId'] = 1;
+$request->variables['fieldReference'] = 'name';
 
 $controller = new ezpRestContentController( 'viewField', $request );
-$result = $controller->doViewField( 1, 'name' );
+$result = $controller->doViewField();
 print_r( $result );
 ?>

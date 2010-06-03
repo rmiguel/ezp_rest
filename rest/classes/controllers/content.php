@@ -44,10 +44,10 @@ class ezpRestContentController extends ezcMvcController
      * @param int $objectId Numerical eZContentObject id
      * @return ezcMvcResult
      */
-    public function doViewObject( $objectId )
+    public function doViewObject()
     {
         try {
-            $content = ezpContent::fromObjectId( $objectId );
+            $content = ezpContent::fromObjectId( $this->objectId );
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
@@ -86,10 +86,10 @@ class ezpRestContentController extends ezcMvcController
      * @param int $objectId Numerical eZContentObjectId
      * @return ezcMvcResult
      */
-    public function doViewFields( $objectId )
+    public function doViewFields()
     {
         try {
-            $content = ezpContent::fromObjectId( $objectId );
+            $content = ezpContent::fromObjectId( $this->objectId );
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
@@ -125,16 +125,16 @@ class ezpRestContentController extends ezcMvcController
      * @param string $fieldReference
      * @return ezcMvcResult
      */
-    public function doViewField( $objectId, $fieldReference )
+    public function doViewField()
     {
         try {
-            $content = ezpContent::fromObjectId( $objectId );
+            $content = ezpContent::fromObjectId( $this->objectId );
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
         }
 
-        if ( !isset( $content->fields->$fieldReference ) )
+        if ( !isset( $content->fields->{$this->fieldReference} ) )
         {
             // @todo Handle error
             return false;
@@ -144,7 +144,7 @@ class ezpRestContentController extends ezcMvcController
         $result = self::viewContent( $content );
 
         // fieldd data
-        $result->variables['fields'][$fieldReference] = $this->attributeOutputData( $content->fields->$fieldReference );
+        $result->variables['fields'][$this->fieldReference] = $this->attributeOutputData( $content->fields->{$this->fieldReference} );
 
         return $result;
     }
