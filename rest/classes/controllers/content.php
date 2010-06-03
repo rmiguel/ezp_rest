@@ -14,8 +14,13 @@ class ezpRestContentController extends ezcMvcController
 
     /**
      * Handles content requests per node or object ID
-     * Request: GET /api/content/node/XXX
-     * Request: GET /api/content/object/XXX
+     *
+     * Requests:
+     * - GET /api/content/node/XXX
+     * - GET /api/content/object/XXX
+     *
+     * Optional HTTP parameters:
+     * - translation=xxx-XX: an optionally forced locale to return
      *
      * @return ezcMvcResult
      */
@@ -31,6 +36,10 @@ class ezpRestContentController extends ezcMvcController
             die( $e->getMessage() );
         }
 
+        // translation parameter
+        if ( isset( $this->request->variables['translation'] ) )
+            $content->setActiveLanguage( $this->request->variables['translation'] );
+
         // object data
         $result = $this->viewContent( $content );
 
@@ -45,15 +54,16 @@ class ezpRestContentController extends ezcMvcController
      * @param ezpContent $content
      * @return array
      */
-    public function fieldsLinks( ezpContent $content)
+    public function fieldsLinks( ezpContent $content )
     {
          $links = array();
          $baseUri = "{$this->request->protocol}://{$this->request->host}{$this->request->uri}";
          foreach( $content->fields as $fieldName => $fieldValue )
          {
+             // @todo Handle translation GET parameter
              $links[$fieldName] = "$baseUri/field/$fieldName";
          }
-         $links['__fat'] = "$baseUri/fields";
+         $links['*'] = "$baseUri/fields";
 
          return $links;
     }
@@ -82,6 +92,10 @@ class ezpRestContentController extends ezcMvcController
         }
 
         $result = new ezcMvcResult;
+
+        // translation parameter
+        if ( isset( $this->request->variables['translation'] ) )
+            $content->setActiveLanguage( $this->request->variables['translation'] );
 
         // iterate over each field and extract its exposed properties
         $returnFields = array();
@@ -131,6 +145,10 @@ class ezpRestContentController extends ezcMvcController
             // @todo Handle error
             return false;
         }
+
+        // translation parameter
+        if ( isset( $this->request->variables['translation'] ) )
+            $content->setActiveLanguage( $this->request->variables['translation'] );
 
         // object metadata
         $result = self::viewContent( $content );
