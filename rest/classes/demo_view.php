@@ -12,7 +12,7 @@ class ezpRestDemoView extends ezcMvcView
     function createZones( $layout )
     {
         $zones = array();
-        // $zones[] = new ezcMvcPhpViewHandler( 'content', 'output.php' );
+        // $zones[] = new ezcMvcPhpViewHandler( 'content', 'rest/rest/output.php' );
         $zones[] = new ezcMvcJsonViewHandler( 'content' );
         return $zones;
     }

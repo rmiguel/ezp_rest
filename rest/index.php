@@ -1,5 +1,36 @@
 <?php
-require 'rest_config.php';
+require 'autoload.php';
+
+// Below we are setting up a minimal eZ Publish environment from the old index.php
+// This is a temporary measure.
+
+// We want PHP to deal with all errors here.
+eZDebug::setHandleType( eZDebug::HANDLE_TO_PHP );
+$GLOBALS['eZGlobalRequestURI'] = eZSys::serverVariable( 'REQUEST_URI' );
+$ini = eZINI::instance();
+eZSys::init( 'index.php', $ini->variable( 'SiteAccessSettings', 'ForceVirtualHost' ) == 'true' );
+$uri = eZURI::instance( eZSys::requestURI() );
+$GLOBALS['eZRequestedURI'] = $uri;
+require_once 'kernel/common/ezincludefunctions.php';
+
+eZExtension::activateExtensions( 'default' );
+
+// setup for changeAccess() needs some methods defined in old index.php
+// We disable it, since we dont' want any override settings to change the
+// debug settings here
+function eZUpdateDebugSettings() {}
+
+
+require_once "access.php";
+
+$access = accessType( $uri,
+                      eZSys::hostname(),
+                      eZSys::serverPort(),
+                      eZSys::indexFile() );
+$access = changeAccess( $access );
+
+
+
 
 $mvcConfig = new ezpMvcConfiguration();
 

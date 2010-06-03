@@ -26,11 +26,11 @@ class ezpRestContentController extends ezcMvcController
 
     public function doFields()
     {
-        // $demoNode = eZContentObjectTreeNode::fetch( $this->contentId );
+        $demoNode = eZContentObjectTreeNode::fetch( $this->contentId );
 
         $result = new ezcMvcResult();
         $result->variables['content'] = "These are the fields, baby.";
-        // $result->variables['payload'] = $demoNode;
+        $result->variables['demo'] = $demoNode;
         // var_dump( __METHOD__, $this );
         return $result;
     }
