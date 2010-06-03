@@ -19,10 +19,10 @@ class ezpRestContentController extends ezcMvcController
      * @param int $nodeId Numerical eZContentObjectTreeNode id
      * @return ezcMvcResult
      */
-    public function doViewNode( $nodeId )
+    public function doViewNode()
     {
         try {
-            $content = ezpContent::fromNodeId( $nodeId );
+            $content = ezpContent::fromNodeId( $this->nodeId );
         } catch( Exception $e ) {
             // @todo handle error
             die( $e->getMessage() );
