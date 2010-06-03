@@ -29,7 +29,9 @@ $access = accessType( $uri,
                       eZSys::indexFile() );
 $access = changeAccess( $access );
 
-
+// Adding the compat layer for i18n methods, as this is used in some of the
+// datatypes in extensions
+require_once 'kernel/common/i18n.php';
 
 
 $mvcConfig = new ezpMvcConfiguration();
