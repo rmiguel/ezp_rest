@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * File containing Mvc configuration
  *
@@ -18,7 +18,9 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 
     public function createRequestParser()
     {
-        return new ezcMvcHttpRequestParser();
+        $parser = new ezcMvcHttpRequestParser();
+        $parser->prefix = str_replace( '/index_rest.php', '', $_SERVER['SCRIPT_NAME'] );
+        return $parser;
     }
 
     public function createResponseWriter( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result, ezcMvcResponse $response )
