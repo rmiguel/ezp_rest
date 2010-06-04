@@ -11,7 +11,7 @@ class ezpRestRouter extends ezcMvcRouter
     public function createRoutes()
     {
         return array(
-            new ezcMvcRailsRoute( '/api/content', 'ezpRestContentController', 'list' ),
+            new ezcMvcRailsRoute( '/api/content/node/:nodeId/list', 'ezpRestContentController', 'list' ),
             new ezcMvcRailsRoute( '/api/content/node/:nodeId', 'ezpRestContentController', 'viewContent' ),
             new ezcMvcRailsRoute( '/api/content/node/:nodeId/fields', 'ezpRestContentController', 'viewFields' ),
             new ezcMvcRailsRoute( '/api/content/node/:nodeId/field/:fieldIdentifier', 'ezpRestContentController', 'viewField' ),

@@ -232,5 +232,34 @@ class ezpRestContentController extends ezcMvcController
             'value'      => $attributeValue,
         );
     }
+
+    public function doList()
+    {
+        $crit = new ezpContentCriteria();
+
+        // Hmm, the following sequence is too long...
+        $crit->accept[] = ezpContentCriteria::location()->subtree( ezpContentLocation::fetchByNodeId( $this->nodeId ) );
+
+        $childNodes = ezpContentRepository::query( $crit );
+
+        // Need paging here
+
+        $result = new ezcMvcResult();
+
+        $retData = array();
+        // To be moved to URI convenience methods
+        $protIndex = strpos( $this->request->protocol, '-' );
+        $baseUri = substr( $this->request->protocol, 0, $protIndex ) . "://{$this->request->host}";
+        foreach( $childNodes as $node )
+        {
+            $childEntry = array(
+                            'objectName' => $node->name,
+                            'classIdentifier' => $node->classIdentifier,
+                            'nodeUrl' => $baseUri . $this->getRouter()->generateUrl( 1, array( 'nodeId' => $node->locations->node_id ) ) );
+            $retData[] = $childEntry;
+        }
+        $result->variables['childNodes'] = $retData;
+        return $result;
+    }
 }
 ?>
