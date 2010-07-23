@@ -11,8 +11,7 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
     {
         $req = clone $request;
         $req->uri = '/api/fatal';
-        $req->variables['message'] = $e->getMessage();
-        $req->variables['stackTrace'] = xdebug_get_function_stack();
+        $req->variables['exception'] = $e;
         return $req;
     }
 
