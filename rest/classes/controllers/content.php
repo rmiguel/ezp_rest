@@ -196,46 +196,74 @@ class ezpRestContentController extends ezcMvcController
      */
     protected function attributeOutputData( ezpContentField $attribute )
     {
-        $sXml = simplexml_import_dom( $attribute->serializedXML );
+        // The following seems like an odd strategy.
 
-        $attributeType = (string)$sXml['type'];
-
-        // get ezremote NS elements in order to get the attribute identifier
-        $ezremoteAttributes = $sXml->attributes( 'http://ez.no/ezobject' );
-        $attributeIdentifier = (string)$ezremoteAttributes['identifier'];
-
-        // attribute value
-        $children = $sXml->children();
-        $attributeValue = array();
-        foreach( $children as $child )
+        // $sXml = simplexml_import_dom( $attribute->serializedXML );
+        // var_dump( $sXml->asXML() );
+        // 
+        // $attributeType = (string)$sXml['type'];
+        // 
+        // // get ezremote NS elements in order to get the attribute identifier
+        // $ezremoteAttributes = $sXml->attributes( 'http://ez.no/ezobject' );
+        // $attributeIdentifier = (string)$ezremoteAttributes['identifier'];
+        // 
+        // // attribute value
+        // $children = $sXml->children();
+        // $attributeValue = array();
+        // foreach( $children as $child )
+        // {
+        //     // simple value
+        //     if ( count( $child->children() ) == 0 )
+        //     {
+        //         // complex value, probably a native eZ Publish XML
+        //         $attributeValue[$child->getName()] = (string)$child;
+        //     }
+        //     else
+        //     {
+        //         if ( $attributeType == 'ezxmltext' )
+        //         {
+        //             $html = $attribute->content->attribute( 'output' )->attribute( 'output_text' );
+        //             $attributeValue = array( strip_tags( $html ) );
+        //         }
+        //     }
+        // }
+        
+        // @TODO move to datatype representation layer
+        switch( $attribute->data_type_string )
         {
-            // simple value
-            if ( count( $child->children() ) == 0 )
-            {
-                // complex value, probably a native eZ Publish XML
-                $attributeValue[$child->getName()] = (string)$child;
-            }
-            else
-            {
-                if ( $attributeType == 'ezxmltext' )
+            case 'ezxmltext':
+                $html = $attribute->content->attribute( 'output' )->attribute( 'output_text' );
+                $attributeValue = array( strip_tags( $html ) );
+                break;
+            case 'ezimage':
+                $strRepImage = $attribute->tostring();
+                $delimPos = strpos( $strRepImage, '|' );
+                if ( $delimPos !== false )
                 {
-                    $html = $attribute->content->attribute( 'output' )->attribute( 'output_text' );
-                    $attributeValue = array( strip_tags( $html ) );
+                    $strRepImage = substr( $strRepImage, 0, $delimPos );
                 }
-            }
+                $attributeValue = array( $strRepImage );
+                break;
+            default:
+                $attributeValue = array( $attribute->tostring() );
+                break;
         }
 
         // cleanup values so that the result is consistent:
         // - no array if one item
         // - false if no values
         if ( count( $attributeValue ) == 0 )
+        {
             $attributeValue = false;
+        }
         elseif ( count( $attributeValue ) == 1 )
+        {
             $attributeValue = current( $attributeValue );
+        }
 
         return array(
-            'type'       => $attributeType,
-            'identifier' => $attributeIdentifier,
+            'type'       => $attribute->data_type_string,
+            'identifier' => $attribute->contentclass_attribute_identifier,
             'value'      => $attributeValue,
         );
     }
