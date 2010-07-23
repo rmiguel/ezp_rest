@@ -113,9 +113,16 @@ class ezpRestContentController extends ezcMvcController
      */
     public function doShow()
     {
+        if ( ($this->exception instanceof ezcMvcRouteNotFoundException) || ($this->exception instanceof ezpContentNotFoundException ) )
+        {
+            // we want to return a 404 to the user
+            $result = new ezcMvcResult;
+            $result->status = new ezpRestNotFound;
+            return $result;
+        }
+
         $result = new ezcMvcResult;
-        $result->variables['message'] = $this->message;
-        $result->variables['stackTrace'] = $this->stackTrace;
+        $result->variables['message'] = $this->exception->getMessage();
         return $result;
     }
 
