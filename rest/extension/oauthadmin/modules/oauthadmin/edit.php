@@ -13,6 +13,7 @@ $module = $Params['Module'];
 
 $Result['path'] = array( array( 'url' => false,
                                 'text' => ezpI18n::tr( 'i18n/context', 'Text' ) ) );
+
 $Result['content'] = $tpl->fetch( 'design:oauthadmin/edit.tpl' );
 return $Result;
 ?>

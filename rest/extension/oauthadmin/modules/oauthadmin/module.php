@@ -12,12 +12,14 @@ $Module = array( 'name' => 'Rest client admin',
                  'variable_params' => true );
 
 $ViewList = array();
+
 $ViewList['list'] = array(
     'script' => 'list.php',
 );
 
 $ViewList['edit'] = array(
     'script' => 'edit.php',
+    'params' => array( 'ApplicationID' ),
 );
 
 $ViewList['action'] = array(
@@ -25,8 +27,10 @@ $ViewList['action'] = array(
     'single_post_actions' => array( 'NewApplicationButton' => 'NewApplication',
                                     'DeleteApplicationButton' => 'DeleteApplication',
                                     'DeleteApplicationListButton' => 'DeleteApplicationList' ),
-    'post_action_parameters' => array( 'DeleteApplication' => array( 'ApplicationID' => 'ApplicationID' ),
-                                       'DeleteApplicationList' => array( 'ApplicationIDList' => 'ApplicationIDList' ) ),
+    'post_action_parameters' => array( 'DeleteApplication' => array( 'ApplicationID' => 'ApplicationID',
+                                                                     'ConfirmDelete' => 'ConfirmDelete' ),
+                                       'DeleteApplicationList' => array( 'ApplicationIDList' => 'ApplicationIDList',
+                                                                         'ConfirmDelete' => 'ConfirmDelete' ) ),
 );
 
 $FunctionList = array( );

@@ -11,10 +11,13 @@
 $tpl = eZTemplate::factory();
 $module = $Params['Module'];
 
+$tpl->setVariable( 'applications', array() );
+
 $Result['path'] = array( array( 'url' => false,
                                 'text' => ezpI18n::tr( 'i18n/context', 'oAuthAdmin' ) ),
                          array( 'url' => false,
                                 'text' => ezpI18n::tr( 'i18n/context', 'Registered applications' ) ) );
+
 $Result['content'] = $tpl->fetch( 'design:oauthadmin/list.tpl' );
 
 return $Result;

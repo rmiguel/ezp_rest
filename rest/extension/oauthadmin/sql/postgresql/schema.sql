@@ -7,9 +7,14 @@ CREATE SEQUENCE ezprest_clients_s
 
 CREATE TABLE ezprest_clients (
     id integer DEFAULT nextval('ezprest_clients_s'::text) NOT NULL,
+    name character varying(100) DEFAULT ''::character varying NOT NULL,
+    description text DEFAULT ''::text NOT NULL,
     client_id character varying(200) DEFAULT ''::character varying NOT NULL,
     client_secret character varying(200) DEFAULT ''::character varying NOT NULL,
     endpoint_uri character varying(200) DEFAULT ''::character varying NOT NULL,
+    owner integer DEFAULT 0 NOT NULL,
+    created integer DEFAULT 0 NOT NULL,
+    updated integer DEFAULT 0 NOT NULL
 );
 
 ADD CONSTRAINT ezprest_clients PRIMARY KEY (id);
