@@ -21,7 +21,12 @@ $ViewList['edit'] = array(
 );
 
 $ViewList['action'] = array(
-    'action.php',
+    'script' => 'action.php',
+    'single_post_actions' => array( 'NewApplicationButton' => 'NewApplication',
+                                    'DeleteApplicationButton' => 'DeleteApplication',
+                                    'DeleteApplicationListButton' => 'DeleteApplicationList' ),
+    'post_action_parameters' => array( 'DeleteApplication' => array( 'ApplicationID' => 'ApplicationID' ),
+                                       'DeleteApplicationList' => array( 'ApplicationIDList' => 'ApplicationIDList' ) ),
 );
 
 $FunctionList = array( );

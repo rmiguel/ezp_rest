@@ -8,12 +8,14 @@
  * @package kernel
  */
 
-require_once( 'kernel/common/template.php' );
-$tpl = templateInit();
+$tpl = eZTemplate::factory();
 $module = $Params['Module'];
 
 $Result['path'] = array( array( 'url' => false,
-                                'text' => ezi18n( 'i18n/context', 'Text' ) ) );
-$Result['content'] = $tpl->fetch( 'design:' );
+                                'text' => ezpI18n::tr( 'i18n/context', 'oAuthAdmin' ) ),
+                         array( 'url' => false,
+                                'text' => ezpI18n::tr( 'i18n/context', 'Registered applications' ) ) );
+$Result['content'] = $tpl->fetch( 'design:oauthadmin/list.tpl' );
+
 return $Result;
 ?>
