@@ -12,7 +12,7 @@ CREATE TABLE ezprest_clients (
     client_id character varying(200) DEFAULT ''::character varying NOT NULL,
     client_secret character varying(200) DEFAULT ''::character varying NOT NULL,
     endpoint_uri character varying(200) DEFAULT ''::character varying NOT NULL,
-    owner integer DEFAULT 0 NOT NULL,
+    owner_id integer DEFAULT 0 NOT NULL,
     created integer DEFAULT 0 NOT NULL,
     updated integer DEFAULT 0 NOT NULL
 );

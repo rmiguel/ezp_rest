@@ -8,7 +8,7 @@
 
 $def = new ezcPersistentObjectDefinition();
 $def->table = "ezprest_clients";
-$def->class = "ezpRestClients";
+$def->class = "ezpRestClient";
 
 $def->idProperty = new ezcPersistentObjectIdProperty;
 $def->idProperty->columnName = 'id';
@@ -40,10 +40,10 @@ $def->properties['endpoint_uri']->columnName = 'endpoint_uri';
 $def->properties['endpoint_uri']->propertyName = 'endPointUri';
 $def->properties['endpoint_uri']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_INT;
 
-$def->properties['owner'] = new ezcPersistentObjectProperty;
-$def->properties['owner']->columnName = 'owner';
-$def->properties['owner']->propertyName = 'owner';
-$def->properties['owner']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_INT;
+$def->properties['owner_id'] = new ezcPersistentObjectProperty;
+$def->properties['owner_id']->columnName = 'owner_id';
+$def->properties['owner_id']->propertyName = 'owner_id';
+$def->properties['owner_id']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_INT;
 
 $def->properties['created'] = new ezcPersistentObjectProperty;
 $def->properties['created']->columnName = 'created';

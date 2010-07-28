@@ -11,7 +11,14 @@
 $tpl = eZTemplate::factory();
 $module = $Params['Module'];
 
-$tpl->setVariable( 'applications', array() );
+include 'extension/oauthadmin/modules/oauthadmin/tmppo.php';
+
+$q = $session->createFindQuery( 'ezpRestClient' );
+$q->where( $q->expr->eq( 'version', ezpRestClient::STATUS_PUBLISHED ) )
+  ->orderBy( 'name', ezcQuerySelect::ASC );
+$tpl->setVariable( 'applications', $session->find( $q, 'ezpRestClient' ) );
+
+$tpl->setVariable( 'module', $module );
 
 $Result['path'] = array( array( 'url' => false,
                                 'text' => ezpI18n::tr( 'i18n/context', 'oAuthAdmin' ) ),

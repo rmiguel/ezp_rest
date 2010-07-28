@@ -20,6 +20,11 @@ $ViewList['list'] = array(
 $ViewList['edit'] = array(
     'script' => 'edit.php',
     'params' => array( 'ApplicationID' ),
+    'single_post_actions' => array( 'StoreButton' => 'Store' ),
+    'single_post_actions' => array( 'DiscardButton' => 'Discard' ),
+    'post_action_parameters' => array( 'Store' => array( 'Name' => 'Name',
+                                                         'EndPointURI' => 'EndPointURI',
+                                                         'Description' => 'Description' ) )
 );
 
 $ViewList['action'] = array(

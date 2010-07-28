@@ -8,11 +8,43 @@
  * @package kernel
  */
 
-$tpl = eZTemplate::factory();
+include 'extension/oauthadmin/modules/oauthadmin/tmppo.php';
+
 $module = $Params['Module'];
 
+// @todo Instanciate the session maybe ?
+$applicationId = $Params['ApplicationID'];
+$application = $session->load( 'ezpRestClient', $applicationId );
+
+// save the modified application
+if ( $module->isCurrentAction( 'Store') )
+{
+    $application->name = $module->actionParameter( 'Name' );
+    $application->description = $module->actionParameter( 'Description' );
+    $application->endpoint_uri = $module->actionParameter( 'EndPointURI' );
+    $application->version = ezpRestClient::STATUS_PUBLISHED;
+    $application->modified = time();
+    $session->update( $application );
+
+    return $module->redirectToView( $module->functionURI( 'list' ) );
+}
+
+if ( $module->isCurrentAction( 'Discard' ) )
+{
+    // if there is a draft, ditch it
+    if ( $application->version == ezpRestClient::STATUS_DRAFT )
+        $session->delete( $application);
+    return $module->redirectTo( $module->functionURI( 'list' ) );
+}
+
+$tpl = eZTemplate::factory();
+$tpl->setVariable( 'module', $module );
+$tpl->setVariable( 'application', $application );
 $Result['path'] = array( array( 'url' => false,
-                                'text' => ezpI18n::tr( 'i18n/context', 'Text' ) ) );
+                                'text' => ezpI18n::tr( 'extension/oauthadmin', 'oAuthAdmin' ) ),
+                         array( 'url' => false,
+                                'text' => ezpI18n::tr( 'extension/oauthadmin', 'Edit REST application' ) )
+);
 
 $Result['content'] = $tpl->fetch( 'design:oauthadmin/edit.tpl' );
 return $Result;

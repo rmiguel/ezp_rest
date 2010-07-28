@@ -28,7 +28,7 @@
     <td><input type="checkbox" name="DeleteIDArray[]" value="{$application.id}" title="{'Select application for removal.'|i18n( 'extension/oauthadmin' )}" /></td>
 
     {* Name. *}
-    <td><a href={concat( $module.functions.classlist.uri, '/', $application.id)|ezurl}>{$application.name|wash}</a></td>
+    <td><a href={concat( $module.functions.view.uri, '/', $application.id)|ezurl}>{$application.name|wash}</a></td>
 
     {* Modifier. *}
     <td>{$application.owner|wash}</a></td>
@@ -37,7 +37,7 @@
     <td>{$application.modified|l10n( shortdatetime )}</td>
 
     {* Edit. *}
-    <td><a href={concat( $module.functions.groupedit.uri, '/', $application.id )|ezurl}><img class="button" src={'edit.gif'|ezimage} width="16" height="16" alt="{'Edit'|i18n( 'design/admin/class/grouplist' )}" title="{'Edit the <%application_name> application.'|i18n( 'extension/oauthadmin',, hash( '%application_name', $application.name ) )|wash}" /></a></td>
+    <td><a href={concat( $module.functions.edit.uri, '/', $application.id )|ezurl}><img class="button" src={'edit.gif'|ezimage} width="16" height="16" alt="{'Edit'|i18n( 'design/admin/class/grouplist' )}" title="{'Edit the <%application_name> application.'|i18n( 'extension/oauthadmin',, hash( '%application_name', $application.name ) )|wash}" /></a></td>
 
 </tr>
 {/foreach}

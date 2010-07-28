@@ -5,7 +5,7 @@ CREATE TABLE `ezprest_clients` (
   `client_id` varchar(200) DEFAULT NULL,
   `client_secret` varchar(200) DEFAULT NULL,
   `endpoint_uri` varchar(200) DEFAULT NULL,
-  `owner` int(11) NOT NULL DEFAULT '0',
+  `owner_id` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `updated` int(11) NOT NULL DEFAULT '0',
   `version` int(1) NOT NULL DEFAULT '0',
