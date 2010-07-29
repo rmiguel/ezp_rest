@@ -17,4 +17,4 @@ CREATE TABLE ezprest_clients (
     updated integer DEFAULT 0 NOT NULL
 );
 
-ADD CONSTRAINT ezprest_clients PRIMARY KEY (id);
+ALTER TABLE ezprest_clients ADD CONSTRAINT ezprest_clients_pkey PRIMARY KEY (id);
