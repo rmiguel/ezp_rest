@@ -27,18 +27,18 @@ $def->properties['description']->propertyType = ezcPersistentObjectProperty::PHP
 
 $def->properties['client_id'] = new ezcPersistentObjectProperty;
 $def->properties['client_id']->columnName = 'client_id';
-$def->properties['client_id']->propertyName = 'clientId';
+$def->properties['client_id']->propertyName = 'client_id';
 $def->properties['client_id']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_STRING;
 
 $def->properties['client_secret'] = new ezcPersistentObjectProperty;
 $def->properties['client_secret']->columnName = 'client_secret';
-$def->properties['client_secret']->propertyName = 'clientSecret';
-$def->properties['client_secret']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_INT;
+$def->properties['client_secret']->propertyName = 'client_secret';
+$def->properties['client_secret']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_STRING;
 
 $def->properties['endpoint_uri'] = new ezcPersistentObjectProperty;
 $def->properties['endpoint_uri']->columnName = 'endpoint_uri';
-$def->properties['endpoint_uri']->propertyName = 'endPointUri';
-$def->properties['endpoint_uri']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_INT;
+$def->properties['endpoint_uri']->propertyName = 'endpoint_uri';
+$def->properties['endpoint_uri']->propertyType = ezcPersistentObjectProperty::PHP_TYPE_STRING;
 
 $def->properties['owner_id'] = new ezcPersistentObjectProperty;
 $def->properties['owner_id']->columnName = 'owner_id';

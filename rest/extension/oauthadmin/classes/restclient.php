@@ -4,9 +4,9 @@ class ezpRestClient
     public $id = null;
     public $name = null;
     public $description = null;
-    public $clientId = null;
-    public $clientSecret = null;
-    public $endPointUri = null;
+    public $client_id = null;
+    public $client_secret = null;
+    public $endpoint_uri = null;
     public $owner_id = null;
     public $created = null;
     public $updated = null;
@@ -18,9 +18,9 @@ class ezpRestClient
         $result['id'] = $this->id;
         $result['name'] = $this->name;
         $result['description'] = $this->description;
-        $result['client_id'] = $this->clientId;
-        $result['client_secret'] = $this->clientSecret;
-        $result['endpoint_uri'] = $this->endPointUri;
+        $result['client_id'] = $this->client_id;
+        $result['client_secret'] = $this->client_secret;
+        $result['endpoint_uri'] = $this->endpoint_uri;
         $result['owner_id'] = $this->owner_id;
         $result['created'] = $this->created;
         $result['updated'] = $this->updated;

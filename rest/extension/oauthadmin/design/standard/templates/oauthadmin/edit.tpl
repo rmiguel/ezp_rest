@@ -1,20 +1,6 @@
 {* Main window *}
 <form action={concat( 'oauthadmin/edit/', $application.id )|ezurl} method="post" id="ClassEdit" name="ApplicationEdit">
 
-<div id="controlbar-top" class="controlbar">
-{* DESIGN: Control bar START *}<div class="box-bc"><div class="box-ml">
-<div class="block">
-<div class="element">
-    <input class="defaultbutton" type="submit" name="StoreButton"   value="{'OK'|i18n( 'extension/oauthadmin' )}" title="{'Store changes and exit from edit mode.'|i18n( 'design/admin/class/edit' )|wash}" />
-
-    <input class="button" type="submit" name="DiscardButton" value="{'Cancel'|i18n( 'design/admin/class/edit' )}" title="{'Discard all changes and exit from edit mode.'|i18n( 'design/admin/class/edit' )|wash}" />
-</div>
-<div class="float-break"></div>
-</div>
-{* DESIGN: Control bar END *}</div></div>
-</div>
-
-
 <div class="context-block">
 {* DESIGN: Header START *}<div class="box-header">
 
@@ -54,15 +40,9 @@
     <input class="box" type="text" id="ApplicationDescription" name="Description" size="30" value="{$application.description|wash}" title="{'Use this field to set the informal application description.'|i18n( 'extension/oauthadmin' )|wash}" />
     </div>
 
-    {* Identifier. *}
-    <div class="block">
-    <label for="ApplicationIdentifier">{'Identifier'|i18n( 'extension/oauthadmin' )}:</label>
-    <input class="box" type="text" id="ApplicationIdentifier" name="Identifier" size="30" value="{$application.client_id|wash}" title="{''|i18n( 'extension/oauthadmin' )|wash}" />
-    </div>
-
     {* Endpoint URI. *}
     <div class="block">
-    <label for="ApplicationEndpointUri">{'Secret'|i18n( 'extension/oauthadmin' )}:</label>
+    <label for="ApplicationEndpointUri">{'Endpoint URI'|i18n( 'extension/oauthadmin' )}:</label>
     <input class="box" type="text" id="ApplicationEndpointUri" name="EndPointURI" size="30" value="{$application.endpoint_uri|wash}" title="{'Use this field to set the application endpoint URI.'|i18n( 'extension/oauthadmin' )|wash}" />
     </div>
 
@@ -70,16 +50,17 @@
 
 {* DESIGN: Content END *}</div>
 
+<div id="controlbar-bottom" class="controlbar">
+{* DESIGN: Control bar START *}<div class="box-bc"><div class="box-ml">
 <div class="block">
-<div class="controlbar">
-{* DESIGN: Control bar START *}<div class="box-bc">
-<div class="block">
-    <input class="defaultbutton" type="submit" name="StoreButton" value="{'OK'|i18n( 'extension/oauthadmin' )}" title="{'Store changes and exit from edit mode.'|i18n( 'extension/oauthadmin' )|wash}" />
+<div class="element">
+    <input class="defaultbutton" type="submit" name="StoreButton" value="{'OK'|i18n( 'extension/oauthadmin' )}" title="{'Store changes and exit from edit mode.'|i18n( 'design/admin/class/edit' )|wash}" />
 
-    <input class="button" type="submit" name="DiscardButton" value="{'Cancel'|i18n( 'extension/oauthadmin' )}" title="{'Discard all changes and exit from edit mode.'|i18n( 'extension/oauthadmin' )|wash}" />
+    <input class="button" type="submit" name="DiscardButton" value="{'Cancel'|i18n( 'design/admin/class/edit' )}" title="{'Discard all changes and exit from edit mode.'|i18n( 'design/admin/class/edit' )|wash}" />
 </div>
-{* DESIGN: Control bar END *}</div>
+<div class="float-break"></div>
 </div>
+{* DESIGN: Control bar END *}</div></div>
 </div>
 
 </div>

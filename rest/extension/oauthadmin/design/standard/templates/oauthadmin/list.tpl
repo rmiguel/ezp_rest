@@ -31,7 +31,7 @@
     <td><a href={concat( $module.functions.view.uri, '/', $application.id)|ezurl}>{$application.name|wash}</a></td>
 
     {* Modifier. *}
-    <td>{$application.owner|wash}</a></td>
+    <td>{$application.owner.contentobject.name|wash}</a></td>
 
     {* Modified. *}
     <td>{$application.modified|l10n( shortdatetime )}</td>

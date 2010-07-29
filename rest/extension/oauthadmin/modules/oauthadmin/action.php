@@ -32,13 +32,27 @@ if ( $module->isCurrentAction( 'NewApplication' ) )
 // delete one application (dedicated button from full view)
 if ( $module->isCurrentAction( 'DeleteApplication' ) )
 {
-    if ( $module->hasActionParameter['ConfirmDelete'] )
+    $applicationId = $module->actionParameter( 'ApplicationID' );
+    $application = $session->load( 'ezpRestClient', $applicationId );
+    if ( $module->hasActionParameter( 'ConfirmDelete' ) )
     {
-        // confirmed, remove the application
+        $session->delete( $application );
+        return $module->redirectToView( 'list' );
     }
+    // display confirmation request
     else
     {
-        // display confirmation request
+        $tpl = eZTemplate::factory();
+        $tpl->setVariable( 'module', $module );
+        $tpl->setVariable( 'application', $application );
+        $Result['path'] = array( array( 'url' => false,
+                                        'text' => ezpI18n::tr( 'extension/oauthadmin', 'oAuthAdmin' ) ),
+                                 array( 'url' => false,
+                                        'text' => ezpI18n::tr( 'extension/oauthadmin', 'Confirm removal' ) )
+        );
+
+        $Result['content'] = $tpl->fetch( 'design:oauthadmin/delete_confirmation.tpl' );
+        return $Result;
     }
 }
 

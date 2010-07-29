@@ -17,16 +17,26 @@ $applicationId = $Params['ApplicationID'];
 $application = $session->load( 'ezpRestClient', $applicationId );
 
 // save the modified application
+eZDebug::writeDebug( $module->currentAction() );
+eZDebug::writeDebug( $_POST );
+
 if ( $module->isCurrentAction( 'Store') )
 {
     $application->name = $module->actionParameter( 'Name' );
+
+    // generate id & secret
+    if ( $application->version == ezpRestClient::STATUS_DRAFT )
+    {
+        $application->client_id = md5( $application->name . uniqid( $application->name ) );
+        $application->client_secret = md5( $application->name . uniqid( $application->name ) );
+    }
     $application->description = $module->actionParameter( 'Description' );
     $application->endpoint_uri = $module->actionParameter( 'EndPointURI' );
     $application->version = ezpRestClient::STATUS_PUBLISHED;
     $application->modified = time();
     $session->update( $application );
 
-    return $module->redirectToView( $module->functionURI( 'list' ) );
+    return $module->redirectTo( $module->functionURI( 'list' ) );
 }
 
 if ( $module->isCurrentAction( 'Discard' ) )

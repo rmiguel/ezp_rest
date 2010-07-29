@@ -20,8 +20,8 @@ $ViewList['list'] = array(
 $ViewList['edit'] = array(
     'script' => 'edit.php',
     'params' => array( 'ApplicationID' ),
-    'single_post_actions' => array( 'StoreButton' => 'Store' ),
-    'single_post_actions' => array( 'DiscardButton' => 'Discard' ),
+    'single_post_actions' => array( 'StoreButton' => 'Store',
+                                    'DiscardButton' => 'Discard' ),
     'post_action_parameters' => array( 'Store' => array( 'Name' => 'Name',
                                                          'EndPointURI' => 'EndPointURI',
                                                          'Description' => 'Description' ) )
@@ -36,6 +36,11 @@ $ViewList['action'] = array(
                                                                      'ConfirmDelete' => 'ConfirmDelete' ),
                                        'DeleteApplicationList' => array( 'ApplicationIDList' => 'ApplicationIDList',
                                                                          'ConfirmDelete' => 'ConfirmDelete' ) ),
+);
+
+$ViewList['view'] = array(
+    'script' => 'view.php',
+    'params' => array( 'ApplicationID' ),
 );
 
 $FunctionList = array( );
