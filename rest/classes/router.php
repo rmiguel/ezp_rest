@@ -19,6 +19,7 @@ class ezpRestRouter extends ezcMvcRouter
             new ezcMvcRailsRoute( '/api/content/object/:objectId/fields', 'ezpRestContentController', 'viewFields' ),
             new ezcMvcRailsRoute( '/api/content/object/:objectId/field/:fieldIdentifier', 'ezpRestContentController', 'viewField' ),
             new ezcMvcRailsRoute( '/api/fatal', 'ezpRestErrorController', 'show' ),
+            new ezcMvcRailsRoute( '/http-basic-auth', 'ezpRestAuthController', 'basicAuth' ),
         );
     }
 }

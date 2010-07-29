@@ -1,5 +1,6 @@
 <?php
 require 'autoload.php';
+require 'rest/rest/classes/lazy.php';
 
 // Below we are setting up a minimal eZ Publish environment from the old index.php
 // This is a temporary measure.
