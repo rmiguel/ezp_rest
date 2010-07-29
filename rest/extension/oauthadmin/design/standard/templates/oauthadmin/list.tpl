@@ -48,7 +48,7 @@
 {* DESIGN: Control bar START *}<div class="block"><div class="controlbar">
 
 <div class="block">
-    <input class="button-disabled" type="submit" name="DeleteApplicationListButton" value="{'Remove selected'|i18n( 'extension/oauthadmin' )}" title="{'Remove the selected applications.'|i18n( 'extension/oauthadmin' )}" />
+    <input class="button" type="submit" name="DeleteApplicationListButton" value="{'Remove selected'|i18n( 'extension/oauthadmin' )}" title="{'Remove the selected applications.'|i18n( 'extension/oauthadmin' )}" />
     <input class="button" type="submit" name="NewApplicationButton" value="{'New application'|i18n( 'extension/oauthadmin' )}" title="{'Create a new application.'|i18n( 'extension/oauthadmin' )}" />
 </div>
 
