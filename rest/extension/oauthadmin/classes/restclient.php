@@ -205,6 +205,21 @@ class ezpRestClient
     }
 
     /**
+     * Checks if this application has been authorized by the current user
+     *
+     * @param mixed $scope The requested security scope
+     * @param eZUser $user The user to check authorization for. Will check for current user if not given.
+     *
+     * @return bool
+     *
+     * @todo Handle non-authorization using
+     */
+    public function isAuthorizedByUser( $scope, $user = null )
+    {
+        return true;
+    }
+
+    /**
      * Validates an attempt (endpoint) redirect URI against the one configured for the client
      *
      * @param string $endPointUri

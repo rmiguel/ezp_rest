@@ -20,34 +20,30 @@ $module = $Params['Module'];
 $http = eZHTTPTool::instance();
 
 // Redirect URI, required to handle other errors, checked first
-if ( !$http->hasGetVariable( 'redirect_uri' ) )
+if ( ( $pRedirectUri = getHTTPVariable( 'redirect_uri' ) ) === false )
 {
     response( '400 Bad Request' );
     eZExecution::cleanExit();
 }
-$pRedirectUri = $http->getVariable( 'redirect_uri' );
 
 // Client ID
-if ( !$http->hasGetVariable( 'client_id' ) )
+if ( ( $pClientId = getHTTPVariable( 'client_id' ) ) === false )
 {
     error( $pRedirectUri, 'invalid_request', "Missing client ID parameter" );
     // redirect to the redirect_uri with GET parameter error=invalid_request
     // @todo mismatch between chapters 3.2's example (error=access-denied) and error codes list at 3.2.1 (error=access_denied)
 }
-$pClientId = $http->getVariable( 'client_id' );
 
 // Requested response type
-if ( !$http->hasGetVariable( 'response_type' ) )
+if ( ( $pResponseType = getHTTPVariable( 'response_type' ) ) === false )
 {
     error( $pRedirectUri, 'invalid_request', "Missing response_type parameter" );
     // redirect to the redirect_uri with GET parameter error=invalid_request
     // @todo mismatch between chapters 3.2's example (error=access-denied) and error codes list at 3.2.1 (error=access_denied)
 }
-$pResponseType = $http->getVariable( 'response_type' );
 
 // Scope
-if ( $http->hasGetVariable( 'scope' ) )
-    $pScope = $http->getVariable( 'scope' );
+$pScope = getHTTPVariable( 'scope' );
 
 // @todo The spec mentions (FIXME:chapter) throwing an error if the request has extra parameters. Check this.
 
@@ -66,7 +62,50 @@ if ( !$application->isEndPointValid( $pRedirectUri ) )
     error( $pRedirectUri, 'redirect_uri_mismatch' );
 }
 
-// Everything is valid, redirect to the redirect_uri with these parameters:
+// Everything is valid. Process to app authorization.
+if ( !$application->isAuthorizedByUser( $pScope, eZUser::currentUser() ) )
+{
+    $http = eZHTTPTool::instance();
+
+    // authorization denied: redirect
+    if ( $http->hasPostVariable( 'DenyButton' ) )
+    {
+        error( 'access_denied' );
+    }
+
+    elseif ( $http->hasPostVariable( 'AuthorizeButton' ) )
+    {
+        // Authorize the application, then process with the token generation + redirect
+    }
+
+    // show authorization form
+    else
+    {
+        $tpl = eZTemplate::factory();
+
+        $tpl->setVariable( 'application', $application );
+        $tpl->setVariable( 'module', $module );
+
+        $parameters = array( 'client_id' => $pClientId,
+                             'response_type' => $pResponseType,
+                             'scope' => $pScope,
+                             'redirect_uri' => $pRedirectUri );
+        $tpl->setVariable( 'httpParameters', $parameters );
+
+        $result = array();
+        $result['content'] = $tpl->fetch( 'design:oauth/authorize.tpl' );
+        $result['pagelayout'] = false;
+        $result['title'] = array( array( 'url' => false, 'title' => 'oAuth authorization request' ) );
+
+        return $result;
+    }
+}
+
+// At this point, the we know the user HAS granted access, and can hand over a token
+$rAccessToken = ezpRestTokenManager::generateToken( $pScope );
+
+// The user has a agreed to authorize this app.
+// Redirect to the redirect_uri with these parameters:
 // - code, only if request_type == code OR code_and_token @todo Implement
 // - access_token, only if request_type == token OR code_and_token
 // - expires_in, the token lifetime in seconds @todo Implement
@@ -115,5 +154,29 @@ function response( $httpHeader, $location = null )
         // debug stuff: echo "header( \"Location: $location\" );\n";
         header( "Location: $location" );
     eZExecution::cleanExit();
+}
+
+/**
+ * Helper function that reads an HTTP variable over GET or POST, depending on the stage.
+ * The POST variables AuthorizeButton and DenyButton will make the function read from POST
+ *
+ * @param string $variable
+ * @return mixed The parameter, or false if not set
+ */
+function getHTTPVariable( $variable )
+{
+    static $hasPost;
+    static $http;
+
+    if ( $http === null )
+        $http = eZHTTPTool::instance();
+
+    if ( $hasPost === null )
+        $hasPost = $http->hasPostVariable( 'AuthorizeButton' ) or $http->hasPostVariable( 'DenyButton' );
+
+    if ( $hasPost )
+        return $http->hasPostVariable( $variable ) ? $http->postVariable( $variable ) : false;
+    else
+        return $http->hasGetVariable( $variable ) ? $http->getVariable( $variable ) : false;
 }
 ?>
