@@ -57,6 +57,7 @@ if ( $module->isCurrentAction( 'DeleteApplication' ) )
 }
 
 // delete several applications (checkboxes on list view)
+// not implemented yet. @todo: implement it !
 if ( $module->isCurrentAction( 'DeleteApplicationList' ) )
 {
     if ( $module->hasActionParameter['ConfirmDelete'] )

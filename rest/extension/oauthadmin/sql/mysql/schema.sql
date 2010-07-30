@@ -10,5 +10,6 @@ CREATE TABLE `ezprest_clients` (
   `updated` int(11) NOT NULL DEFAULT '0',
   `version` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `client_id_UNIQUE` (`client_id`,`version`)
+  UNIQUE KEY `client_id_UNIQUE` (`client_id`,`version`),
+  KEY `client_id` (`client_id`)
 ) ENGINE=InnoDB;

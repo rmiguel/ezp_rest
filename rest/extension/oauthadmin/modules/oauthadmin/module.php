@@ -15,6 +15,7 @@ $ViewList = array();
 
 $ViewList['list'] = array(
     'script' => 'list.php',
+    'default_navigation_part' => 'ezsetupnavigationpart',
 );
 
 $ViewList['edit'] = array(
@@ -24,7 +25,8 @@ $ViewList['edit'] = array(
                                     'DiscardButton' => 'Discard' ),
     'post_action_parameters' => array( 'Store' => array( 'Name' => 'Name',
                                                          'EndPointURI' => 'EndPointURI',
-                                                         'Description' => 'Description' ) )
+                                                         'Description' => 'Description' ) ),
+    'default_navigation_part' => 'ezsetupnavigationpart',
 );
 
 $ViewList['action'] = array(
@@ -36,11 +38,13 @@ $ViewList['action'] = array(
                                                                      'ConfirmDelete' => 'ConfirmDelete' ),
                                        'DeleteApplicationList' => array( 'ApplicationIDList' => 'ApplicationIDList',
                                                                          'ConfirmDelete' => 'ConfirmDelete' ) ),
+    'default_navigation_part' => 'ezsetupnavigationpart',
 );
 
 $ViewList['view'] = array(
     'script' => 'view.php',
     'params' => array( 'ApplicationID' ),
+    'default_navigation_part' => 'ezsetupnavigationpart',
 );
 
 $FunctionList = array( );

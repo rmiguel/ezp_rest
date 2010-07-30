@@ -34,7 +34,13 @@
     <td>{$application.owner.contentobject.name|wash}</a></td>
 
     {* Modified. *}
-    <td>{$application.modified|l10n( shortdatetime )}</td>
+    {if $application.modified|ne(0)}
+        {def $modified=$application.modified}
+    {else}
+        {def $modified=$application.created}
+    {/if}
+    <td>{$modified|l10n( shortdatetime )}</td>
+    {undef $modified}
 
     {* Edit. *}
     <td><a href={concat( $module.functions.edit.uri, '/', $application.id )|ezurl}><img class="button" src={'edit.gif'|ezimage} width="16" height="16" alt="{'Edit'|i18n( 'design/admin/class/grouplist' )}" title="{'Edit the <%application_name> application.'|i18n( 'extension/oauthadmin',, hash( '%application_name', $application.name ) )|wash}" /></a></td>

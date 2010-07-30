@@ -1,15 +1,72 @@
 <?php
+/**
+ * File containing the ezpRestClient class.
+ *
+ * @copyright Copyright (C) 1999-2010 eZ Systems AS. All rights reserved.
+ * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
+ * @version //autogentag//
+ * @package kernel
+ */
+
+/**
+ * Persistent object class representing a REST application.
+ */
 class ezpRestClient
 {
     public $id = null;
+
+    /**
+     * Application name
+     * @var string
+     */
     public $name = null;
+
+    /**
+     * Application description
+     * @var string
+     */
     public $description = null;
+
+    /**
+     * Application client ID, as used over oAuth to authentify the application
+     * @var string
+     */
     public $client_id = null;
+
+    /**
+     * Application client secret, as used over oAuth to authentify the application
+     * @var string
+     */
     public $client_secret = null;
+
+    /**
+     * Application client endpoint URI. Used to validate the redirection URI requested by the authorize call.
+     * @var string
+     */
     public $endpoint_uri = null;
+
+    /**
+     * ID of the eZ Publish user who owns the application
+     * @var int
+     */
     public $owner_id = null;
+
+    /**
+     * Application creation date, as a unix timestamp
+     * @var int
+     */
     public $created = null;
+
+    /**
+     * Application update date, as a unix timestamp
+     * @var int
+     */
     public $updated = null;
+
+    /**
+     * Application version, used to pre-create a draft when first creation a new application.
+     * @var int
+     */
     public $version = null;
 
     public function getState()
@@ -36,6 +93,11 @@ class ezpRestClient
         }
     }
 
+    /**
+     * eZPersistentObject wrapper method
+     * @param string $attributeName
+     * @return mixed
+     */
     public function attribute( $attributeName )
     {
         if ( property_exists( $this, $attributeName ) )
@@ -46,11 +108,22 @@ class ezpRestClient
             eZDebug::writeError( "Attribute '$attributeName' does not exist", __CLASS__ . '::attribute' );
     }
 
+    /**
+     * eZPersistentObject wrapper method
+     * @param string $attributeName
+     * @return bool
+     */
     public function hasAttribute( $attributeName )
     {
         return property_exists( $this, $attributeName ) or $this->__isset( $attributeName );
     }
 
+    /**
+     * eZPersistentObject wrapper method:
+     * handles "function attributes"
+     * @param string $propertyName
+     * @return mixed
+     */
     public function __get( $propertyName )
     {
         switch( $propertyName )
@@ -84,6 +157,49 @@ class ezpRestClient
     public function __isset( $propertyName )
     {
         return in_array( $propertyName, array( 'owner' ) );
+    }
+
+    /**
+     * Validates an authorization request by an application using the ID, redirection URI and secret if provided.
+     *
+     * @var string $clientId
+     * @var string $endPointUri
+     * @var string $clientSecret
+     *
+     * @return bool True if the app is valid, false if it isn't
+     * @todo Enhance the return variable, as several status would be required. Exceptions, or constants ?
+     */
+    public static function authorizeApplication( $clientId, $endPointUri, $clientSecret = null )
+    {
+        $client = self::fetchByClientId( $clientId );
+
+        // no client found with this ID
+        if ( $client === false )
+            return false;
+
+        if ( $clientSecret !== null && ( $clientSecret !== $client->client_secret ) )
+            return false;
+
+        if ( ( $client->endpoint_uri !== '' ) && ( $endPointUri !== $client->endpoint_uri ) )
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Fetches a rest application using a client Id
+     * @param string $clientId
+     * @return ezpRestClient
+     */
+    public static function fetchByClientId( $clientId )
+    {
+        $q = ezcPersistentSessionInstance::get()->createFindQuery( __CLASS__ );
+        $q->where( $q->expr->eq( 'client_id', $clientId ) );
+        $results = $session->find( $q, __CLASS__ );
+        if ( count( $results != 1 ) )
+            return false;
+        else
+            return $results[0];
     }
 
     const STATUS_DRAFT = 1;
