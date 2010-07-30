@@ -3,5 +3,6 @@
 [ModuleSettings]
 ExtensionRepositories[]=oauthadmin
 ModuleList[]=oauthadmin
+ModuleList[]=oauth
 
 */ ?>

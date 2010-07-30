@@ -193,13 +193,27 @@ class ezpRestClient
      */
     public static function fetchByClientId( $clientId )
     {
-        $q = ezcPersistentSessionInstance::get()->createFindQuery( __CLASS__ );
-        $q->where( $q->expr->eq( 'client_id', $clientId ) );
+        $session = ezcPersistentSessionInstance::get();
+
+        $q = $session->createFindQuery( __CLASS__ );
+        $q->where( $q->expr->eq( 'client_id', $q->bindValue( $clientId ) ) );
         $results = $session->find( $q, __CLASS__ );
-        if ( count( $results != 1 ) )
+        if ( count( $results ) != 1 )
             return false;
         else
-            return $results[0];
+            return array_shift( $results );
+    }
+
+    /**
+     * Validates an attempt (endpoint) redirect URI against the one configured for the client
+     *
+     * @param string $endPointUri
+     *
+     * @return bool true if the URI is valid, false otherwise
+     */
+    public function isEndPointValid( $endPointUri )
+    {
+        return ( $endPointUri === $this->endpoint_uri );
     }
 
     const STATUS_DRAFT = 1;
