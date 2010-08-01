@@ -14,7 +14,10 @@ CREATE TABLE ezprest_clients (
     endpoint_uri character varying(200) DEFAULT ''::character varying NOT NULL,
     owner_id integer DEFAULT 0 NOT NULL,
     created integer DEFAULT 0 NOT NULL,
-    updated integer DEFAULT 0 NOT NULL
+    updated integer DEFAULT 0 NOT NULL,
+    "version" integer DEFAULT 0 NOT NULL
 );
 
 ALTER TABLE ezprest_clients ADD CONSTRAINT ezprest_clients_pkey PRIMARY KEY (id);
+CREATE INDEX client_id ON ezprest_clients USING btree ( client_id );
+CREATE UNIQUE INDEX client_id_UNIQUE ON ezprest_clients USING btree ( client_id, "version" );
