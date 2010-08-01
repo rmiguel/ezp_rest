@@ -7,17 +7,17 @@ CREATE SEQUENCE ezprest_clients_s
 
 CREATE TABLE ezprest_clients (
     id integer DEFAULT nextval('ezprest_clients_s'::text) NOT NULL,
-    name character varying(100) DEFAULT ''::character varying NOT NULL,
-    description text DEFAULT ''::text NOT NULL,
-    client_id character varying(200) DEFAULT ''::character varying NOT NULL,
-    client_secret character varying(200) DEFAULT ''::character varying NOT NULL,
-    endpoint_uri character varying(200) DEFAULT ''::character varying NOT NULL,
+    name character varying(100) DEFAULT NULL,
+    description text,
+    client_id character varying(200) DEFAULT NULL,
+    client_secret character varying(200) DEFAULT NULL,
+    endpoint_uri character varying(200) DEFAULT NULL,
     owner_id integer DEFAULT 0 NOT NULL,
     created integer DEFAULT 0 NOT NULL,
     updated integer DEFAULT 0 NOT NULL,
     "version" integer DEFAULT 0 NOT NULL
 );
 
-ALTER TABLE ezprest_clients ADD CONSTRAINT ezprest_clients_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ezprest_clients ADD CONSTRAINT ezprest_clients_pkey PRIMARY KEY ( id );
 CREATE INDEX client_id ON ezprest_clients USING btree ( client_id );
 CREATE UNIQUE INDEX client_id_UNIQUE ON ezprest_clients USING btree ( client_id, "version" );
