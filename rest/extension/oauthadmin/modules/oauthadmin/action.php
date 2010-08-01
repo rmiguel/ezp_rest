@@ -26,6 +26,7 @@ if ( $module->isCurrentAction( 'NewApplication' ) )
 
     $session->save( $application );
 
+    // The following does not work on PostgreSQL, incorrect id. Probably need refresh from DB.
     return $module->redirectToView( 'edit', array( $application->id ) );
 }
 
