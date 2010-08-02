@@ -1,7 +1,7 @@
 <?php /* #?ini charset="utf-8"?
 
 [ModuleSettings]
-ExtensionRepositories[]=oauthadmin
+ExtensionRepositories[]=oauth
 ModuleList[]=oauthadmin
 ModuleList[]=oauth
 

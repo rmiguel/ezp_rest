@@ -2,6 +2,6 @@
 
 
 [ExtensionSettings]
-DesignExtensions[]=oauthadmin
+DesignExtensions[]=oauth
 
 */ ?>

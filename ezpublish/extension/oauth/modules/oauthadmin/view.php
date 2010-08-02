@@ -8,7 +8,7 @@
  * @package kernel
  */
 
-include 'extension/oauthadmin/modules/oauthadmin/tmppo.php';
+include 'extension/oauth/modules/oauthadmin/tmppo.php';
 
 $module = $Params['Module'];
 

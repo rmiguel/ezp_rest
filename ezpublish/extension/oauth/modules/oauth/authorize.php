@@ -47,7 +47,7 @@ $pScope = getHTTPVariable( 'scope' );
 
 // @todo The spec mentions (FIXME:chapter) throwing an error if the request has extra parameters. Check this.
 
-include 'extension/oauthadmin/modules/oauthadmin/tmppo.php';
+include 'extension/oauth/modules/oauthadmin/tmppo.php';
 
 // Try loading the REST client based on the ID
 $application = ezpRestClient::fetchByClientId( $pClientId );

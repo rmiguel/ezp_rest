@@ -11,7 +11,7 @@
 $tpl = eZTemplate::factory();
 $module = $Params['Module'];
 
-include 'extension/oauthadmin/modules/oauthadmin/tmppo.php';
+include 'extension/oauth/modules/oauthadmin/tmppo.php';
 
 $q = $session->createFindQuery( 'ezpRestClient' );
 $q->where( $q->expr->eq( 'version', ezpRestClient::STATUS_PUBLISHED ) )
