@@ -5,7 +5,6 @@ class ezpContentNotFoundException extends ezcBaseException
     {
         parent::__construct( $message );
     }
-
 }
 
 ?>
