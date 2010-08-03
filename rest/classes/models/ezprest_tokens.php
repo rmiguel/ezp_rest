@@ -5,7 +5,7 @@
  * Data class ezprest_tokens.
  * Class to be used with eZ Components PersistentObject.
  */
-class ezprest_tokens
+class ezpRestToken
 {
     /**
      * id

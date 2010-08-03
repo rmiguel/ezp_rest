@@ -3,7 +3,7 @@
 
 $def = new ezcPersistentObjectDefinition();
 $def->table = 'ezprest_tokens';
-$def->class = 'ezprest_tokens';
+$def->class = 'ezpRestToken';
 
 $def->idProperty               = new ezcPersistentObjectIdProperty();
 $def->idProperty->columnName   = 'id';
