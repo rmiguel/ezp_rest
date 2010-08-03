@@ -45,6 +45,8 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 
     public function runRequestFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request )
     {
+        // $authConfig = new ezpRestAuthConfiguration( $routeInfo, $request );
+        // return $autConfig->filter();
         // By default we always require auth here ... except for the login one
         switch ( $routeInfo->matchedRoute )
         {
@@ -53,7 +55,7 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
             case '/login/oauth/token':
                 break;
             default:
-                return $this->runAuthFilter( $request );
+                return $this->runOauthFilter( $request );
                 break;
         }
     }
@@ -70,6 +72,7 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 
     public function runAuthFilter( $request )
     {
+        // $basicAuth = new ezpRestBasicAuthStyle;
         // Testing basic auth
         $logger = ezcLog::getInstance();
         $logger->source = __FUNCTION__;
@@ -102,6 +105,26 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
             $logger->log( "Authentication successful", ezcLog::DEBUG );
             // $logger->log( var_export( $request->raw, true), ezcLog::DEBUG );
         }
+    }
+
+    public function runOauthFilter( $request )
+    {
+        // Setup for testing credentials
+        // Check for required components (fail if not present)
+        // Fail if too many components are required (according to spec, later)
+        // Validate components
+        $logger = ezcLog::getInstance();
+        $logger->source = __FUNCTION__;
+        $logger->category = "oauth";
+
+        $logger->log( "Begin oauth verification", ezcLog::DEBUG );
+
+        $oauth = new ezpOauthUtility;
+        $token = $oauth->getToken( $request );
+
+        // Fetch and validate token for validity and optionally scope.
+        // Either let teh request pass, or immediately bail with 401.
+
     }
 }
 ?>
