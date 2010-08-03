@@ -52,7 +52,8 @@ class ezpOauthUtility
         $this->logger->log( "Trying to get access token from http headers", ezcLog::DEBUG );
         $token = $this->getTokenFromAuthorizationHeader();
         if ( $token !== null )
-            $this->logger->log( "Found token from header", ezcLog::DEBUG );
+            $this->logger->log( "Found token from header", ezcLog::DEBUG, array( "token" => $token ) );
+        return $token;
     }
 
 
