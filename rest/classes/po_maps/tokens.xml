@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database>
  <table>
-  <name>ezprest_tokens</name>
+  <name>ezprest_token</name>
   <declaration>
    <field>
     <name>id</name>
@@ -36,7 +36,7 @@
     </field>
    </index>
    <index>
-    <name>tokens_client_id</name>
+    <name>token_client_id</name>
     <field>
      <name>client_id</name>
     </field>
