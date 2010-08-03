@@ -28,5 +28,13 @@ class ezpRestDbConfig implements ezcBaseConfigurationInitializer
 }
 ezcBaseInit::setCallback( 'ezcInitDatabaseInstance', 'ezpRestDbConfig' );
 
+class ezpRestPoConfig implements ezcBaseConfigurationInitializer
+{
+    public static function configureObject( $instance )
+    {
+        return new ezcPersistentSession( ezcDbInstance::get(), new ezcPersistentCodeManager( 'rest/rest/classes/po_maps' ) );
+    }
+}
+ezcBaseInit::setCallback( 'ezcInitPersistentSessionInstance', 'ezpRestPoConfig' );
 
 ?>
