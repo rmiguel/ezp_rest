@@ -124,6 +124,17 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 
         // Fetch and validate token for validity and optionally scope.
         // Either let teh request pass, or immediately bail with 401.
+        // Section 5.2.1 for error handling.
+        //
+        // invalid_request missing required params -> 400
+        //
+        // invalid_token Expired token which cannot be refreshed -> 401
+        //
+        // expired_token Token has expired -> 401
+        //
+        // insufficient_scope The requested scope is outside scope associated with token -> 403
+        //
+        // Do not include error info for requests which did not contain auth details.ref. 5.2.1
 
     }
 }
