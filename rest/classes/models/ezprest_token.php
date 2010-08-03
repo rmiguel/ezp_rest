@@ -5,32 +5,32 @@
  * Data class ezprest_tokens.
  * Class to be used with eZ Components PersistentObject.
  */
-class ezpRestToken
+class ezpRestToken implements ezcPersistentObject
 {
     /**
      * id
      *
      * @var string
      */
-    private $id;
+    public $id;
     /**
      * expirytime
      *
      * @var int
      */
-    private $expirytime;
+    public $expirytime;
     /**
      * client_id
      *
      * @var string
      */
-    private $client_id;
+    public $client_id;
     /**
      * scope
      *
      * @var string
      */
-    private $scope;
+    public $scope;
 
     /**
      * Set the PersistentObject state.
