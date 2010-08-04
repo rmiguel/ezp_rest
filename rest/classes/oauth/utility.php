@@ -19,13 +19,6 @@ class ezpOauthUtility
     const AUTH_HEADER_NAME     = 'Authorization';
     const AUTH_CGI_HEADER_NAME = 'HTTP_AUTHORIZATION';
 
-    public function __construct()
-    {
-        $this->logger = ezcLog::getInstance();
-        $this->logger->source = __CLASS__;
-        $this->logger->category = "oauth";
-    }
-
     /**
      * Retrieving token as per section 5 of draft-ietf-oauth-v2-10
      *
@@ -42,17 +35,22 @@ class ezpOauthUtility
      * @param string $ezcMvcRequest
      * @return void
      */
-    public function getToken( ezcMvcRequest $request )
+    public static function getToken( ezcMvcRequest $request )
     {
+        $logger = ezcLog::getInstance();
+        $logger->source = __CLASS__;
+        $logger->category = "oauth";
+
         // 1. Should first extract required token from the request object
         //    as we know that the request parser does not support this at the
         //    moment we, will skip to the fallback right away. That is to say,
         //    ideally the request parser would make this header available to us,
         //    when available, automatically.
-        $this->logger->log( "Trying to get access token from http headers", ezcLog::DEBUG );
-        $token = $this->getTokenFromAuthorizationHeader();
+
+        $logger->log( "Trying to get access token from http headers", ezcLog::DEBUG );
+        $token = self::getTokenFromAuthorizationHeader();
         if ( $token !== null )
-            $this->logger->log( "Found token from header", ezcLog::DEBUG, array( "token" => $token ) );
+            $logger->log( "Found token from header", ezcLog::DEBUG, array( "token" => $token ) );
         return $token;
     }
 
@@ -73,7 +71,7 @@ class ezpOauthUtility
      *
      * @return string The access token string.
      */
-    protected function getTokenFromAuthorizationHeader()
+    protected static function getTokenFromAuthorizationHeader()
     {
         // @TODO We cannot throw exceptions here, until all alternatives are checked.
         $apacheHeaders = apache_request_headers();

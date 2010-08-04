@@ -18,6 +18,13 @@ class ezpRestAuthController extends ezcMvcController
         $res->status = new ezcMvcResultUnauthorized( "eZ Publish REST" );
         return $res;
     }
+
+    public function doOauthRequired()
+    {
+        $res = new ezcMvcResult();
+        $res->status = new ezpOauthRequired( "eZ Publish REST" );
+        return $res;
+    }
 }
 
 ?>

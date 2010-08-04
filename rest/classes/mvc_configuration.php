@@ -46,16 +46,22 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
     public function runRequestFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request )
     {
         // $authConfig = new ezpRestAuthConfiguration( $routeInfo, $request );
+        // $authConfig->setUp();
         // return $autConfig->filter();
+
         // By default we always require auth here ... except for the login one
         switch ( $routeInfo->matchedRoute )
         {
             case '/http-basic-auth':
+            case '/login/oauth':
             case '/login/oauth/authorize':
             case '/login/oauth/token':
+            case '/api/fatal':
                 break;
             default:
-                return $this->runOauthFilter( $request );
+                // return $this->runOauthFilter( $request );
+                $oa = new ezpRestOauthAuthenticationStyle;
+                return $oa->authenticate( $request );
                 break;
         }
     }
@@ -107,35 +113,5 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
         }
     }
 
-    public function runOauthFilter( $request )
-    {
-        // Setup for testing credentials
-        // Check for required components (fail if not present)
-        // Fail if too many components are required (according to spec, later)
-        // Validate components
-        $logger = ezcLog::getInstance();
-        $logger->source = __FUNCTION__;
-        $logger->category = "oauth";
-
-        $logger->log( "Begin oauth verification", ezcLog::DEBUG );
-
-        $oauth = new ezpOauthUtility;
-        $token = $oauth->getToken( $request );
-
-        // Fetch and validate token for validity and optionally scope.
-        // Either let teh request pass, or immediately bail with 401.
-        // Section 5.2.1 for error handling.
-        //
-        // invalid_request missing required params -> 400
-        //
-        // invalid_token Expired token which cannot be refreshed -> 401
-        //
-        // expired_token Token has expired -> 401
-        //
-        // insufficient_scope The requested scope is outside scope associated with token -> 403
-        //
-        // Do not include error info for requests which did not contain auth details.ref. 5.2.1
-
-    }
 }
 ?>

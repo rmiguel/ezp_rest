@@ -25,6 +25,13 @@ class ezpRestErrorController extends ezcMvcController
             $result->status = new ezpRestNotFound;
             return $result;
         }
+        else if ( $this->exception instanceof ezpOauthTokenNotFoundException )
+        {
+            $result = new ezcMvcResult;
+            $result->status = new ezpRestOauthErrorStatus( ezpHttpResponseCodes::BAD_REQUEST );
+            $result->variables['message'] = $this->exception->getMessage();
+            return $result;
+        }
 
         $result = new ezcMvcResult;
         $result->variables['message'] = $this->exception->getMessage();
