@@ -26,15 +26,15 @@ class ezpRestContentController extends ezcMvcController
      */
     public function doViewContent()
     {
-        try {
+        // try {
             if ( isset( $this->nodeId ) )
                 $content = ezpContent::fromNodeId( $this->nodeId );
             elseif ( isset( $this->objectId ) )
                 $content = ezpContent::fromObjectId( $this->objectId );
-        } catch( Exception $e ) {
+        // } catch( Exception $e ) {
             // @todo handle error
-            die( $e->getMessage() );
-        }
+            // die( $e->getMessage() );
+        // }
 
         // translation parameter
         if ( isset( $this->request->variables['translation'] ) )
