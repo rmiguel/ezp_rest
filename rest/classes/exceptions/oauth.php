@@ -14,6 +14,7 @@
  */
 abstract class ezpOauthException extends ezcBaseException
 {
+    public $errorType = null;
     public function __construct( $message )
     {
         parent::__construct( $message );

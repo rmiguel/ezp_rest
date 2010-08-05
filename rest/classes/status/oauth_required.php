@@ -20,8 +20,18 @@ class ezpOauthRequired implements ezcMvcResultStatusObject
      */
     public $realm;
 
-    // For error codes see section 5.2.1
+    /**
+     * The error type identifier as defined per section 5.2.1 of oauth2.0 #10
+     *
+     * @var string
+     */
     public $errorType;
+
+    /**
+     * An optional human-readable error message.
+     *
+     * @var string
+     */
     public $errorMessage;
 
     public function __construct( $realm, $errorType = null, $errorMessage = null )
@@ -40,17 +50,29 @@ class ezpOauthRequired implements ezcMvcResultStatusObject
     {
         if ( $writer instanceof ezcMvcHttpResponseWriter )
         {
-            $writer->headers['HTTP/1.1 ' . ezpHttpResponseCodes::UNAUTHORIZED] = "";
-
-            if ( $this->errorType !== null && $this->errorMessage !== null)
-            {
-                $writer->headers['WWW-Authenticate'] = "OAuth realm=\"{$this->realm}\" error=\"{$this->errorType}\"";
-            }
-            else
-            {
-                $writer->headers['WWW-Authenticate'] = "OAuth realm=\"{$this->realm}\"";
-            }
+            $writer->headers['HTTP/1.1 ' . ezpOauthErrorType::httpCodeforError( $this->errorType)] = "";
+            $writer->headers['WWW-Authenticate'] = "OAuth realm=\"{$this->realm}\"{$this->createErrorString()}";
         }
+    }
+
+    /**
+     * Creates for use in authentcation challenge header
+     *
+     * @return string
+     */
+    protected function createErrorString()
+    {
+        $str = '';
+        if ( $this->errorType !== null )
+        {
+            $str .= " error=\"{$this->errorType}\"";
+        }
+
+        if ( $this->errorMessage !== null )
+        {
+            $str .= " error_description=\"{$this->errorMessage}\"";
+        }
+        return $str;
     }
 }
 ?>

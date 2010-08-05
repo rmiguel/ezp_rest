@@ -76,15 +76,15 @@ class ezpOauthUtility
         // @TODO We cannot throw exceptions here, until all alternatives are checked.
         $apacheHeaders = apache_request_headers();
         if ( !isset( $apacheHeaders[self::AUTH_HEADER_NAME] ) )
-            throw new ezpOauthTokenNotFoundException( "No Authorization header found" );
+            throw new ezpOauthNoAuthInfoException( "No Authorization header found" );
 
         $tokenPattern = "/^(?P<authscheme>OAuth)\s(?P<token>[a-zA-Z0-9]+)$/";
         $match = preg_match( $tokenPattern, $apacheHeaders[self::AUTH_HEADER_NAME], $m );
         if ( !$match )
-            throw new ezpOauthTokenNotFoundException( "Token not found Authorization header" );
+            throw new ezpOauthInvalidRequestException( "Token not found in Authorization header" );
 
         if ( $m['authscheme'] !== 'OAuth' )
-            throw new ezpOauthTokenNotFoundException( "OAuth authentication scheme not found" );
+            throw new ezpOauthNoAuthInfoException( "OAuth authentication scheme not found" );
 
         return $m['token'];
     }

@@ -1,14 +1,11 @@
 <?php
 class ezpRestOauthErrorStatus implements ezcMvcResultStatusObject
 {
-    // Messages should also in some cases be added to the HTTP body, with
-    // info from app, extending the normal short http default boiler palte message.
+    public $errorType = null;
 
-    public $code = null;
-
-    public function __construct( $code )
+    public function __construct( $errorType = null )
     {
-        $this->code = $code;
+        $this->errorType = $errorType;
     }
 
     public function process( ezcMvcResponseWriter $writer )
@@ -16,7 +13,7 @@ class ezpRestOauthErrorStatus implements ezcMvcResultStatusObject
         if ( $writer instanceof ezcMvcHttpResponseWriter )
         {
             // @TODO message lookup
-            $writer->headers["HTTP/1.1 " . $this->code] = "";
+            $writer->headers["HTTP/1.1 " . ezpOauthErrorType::httpCodeForError( $this->errorType )] = "";
         }
     }
 }
