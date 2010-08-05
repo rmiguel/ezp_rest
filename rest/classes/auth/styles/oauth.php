@@ -35,9 +35,7 @@ class ezpRestOauthAuthenticationStyle implements ezpRestAuthenticationStyle
 
         $logger->log( "Begin oauth verification", ezcLog::DEBUG );
 
-
         $token = ezpOauthUtility::getToken( $request );
-        return $token;
     }
 
     public function authenticate( ezcMvcRequest $request )
@@ -47,10 +45,10 @@ class ezpRestOauthAuthenticationStyle implements ezpRestAuthenticationStyle
         // $fetchedToken = $session->load( 'ezpRestToken', $token );
         // $logger->log( $fetchedToken->client_id, ezcLog::DEBUG );
 
+        // We need to catch exceptions here, as exceptions thrown in the RequestFilter
+        // is not caught by MvcTools, so the error controller will not pick them up.
         try
         {
-            $auth = self::setup( $request );
-
             // Not valid token
             $request->uri = '/login/oauth';
             return new ezcMvcInternalRedirect( $request );

@@ -18,7 +18,6 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
     public function createRequestParser()
     {
         $parser = new ezcMvcHttpRequestParser();
-        // $parser->prefix = str_replace( '/index_rest.php', '', $_SERVER['SCRIPT_NAME'] );
         return $parser;
     }
 
@@ -45,24 +44,18 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 
     public function runRequestFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request )
     {
-        // $authConfig = new ezpRestAuthConfiguration( $routeInfo, $request );
-        // $authConfig->setUp();
-        // return $autConfig->filter();
-
-        // By default we always require auth here ... except for the login one
-        switch ( $routeInfo->matchedRoute )
+        // We need to catch exceptions here, as exceptions thrown in the RequestFilter
+        // is not caught by MvcTools, so the error controller will not pick them up.
+        try
         {
-            case '/http-basic-auth':
-            case '/login/oauth':
-            case '/login/oauth/authorize':
-            case '/login/oauth/token':
-            case '/api/fatal':
-                break;
-            default:
-                // return $this->runOauthFilter( $request );
-                $oa = new ezpRestOauthAuthenticationStyle;
-                return $oa->authenticate( $request );
-                break;
+            $authConfig = new ezpRestAuthConfiguration( $routeInfo, $request );
+            return $authConfig->filter();
+        }
+        catch ( Exception $e )
+        {
+            $request->variables['exception'] = $e;
+            $request->uri = '/api/fatal';
+            return new ezcMvcInternalRedirect( $request );
         }
     }
 
