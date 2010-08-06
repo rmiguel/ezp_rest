@@ -61,7 +61,10 @@ class ezpMvcConfiguration implements ezcMvcDispatcherConfiguration
 
     public function runResponseFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result, ezcMvcResponse $response )
     {
-
+        $response->content = new ezcMvcResultContent();
+        $response->content->type = "application/json";
+        $response->content->charset = "UTF-8";
+        $response->generator = "eZ Publish";
     }
 
     public function runResultFilters( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result )
