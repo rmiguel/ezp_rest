@@ -47,10 +47,28 @@ class ezpOauthUtility
         //    ideally the request parser would make this header available to us,
         //    when available, automatically.
 
+        $token = null;
+
         $logger->log( "Trying to get access token from http headers", ezcLog::DEBUG );
+
+
         $token = self::getTokenFromAuthorizationHeader();
         if ( $token !== null )
+        {
             $logger->log( "Found token from header", ezcLog::DEBUG, array( "token" => $token ) );
+            return $token;
+        }
+
+        // 2
+        $token = self::getTokenFromQueryComponent();
+        if ( $token !== null )
+            return $token;
+
+        // 3
+        $token = self::getTokenFromHttpBody();
+        if ( $token !== null )
+            return $token;
+
         return $token;
     }
 
