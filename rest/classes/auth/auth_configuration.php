@@ -46,11 +46,11 @@ class ezpRestAuthConfiguration
         }
 
         // 1. Initialize the context needed for authenticating the user.
-        $this->filter->setup( $this->req );
+        $auth = $this->filter->setup( $this->req );
 
         // 2.Perform the authentication check this will redirect properly if
         // unsuccessful
-        return $this->filter->authenticate( $this->req );
+        return $this->filter->authenticate( $auth, $this->req );
 
     }
 

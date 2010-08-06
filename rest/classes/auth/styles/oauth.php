@@ -9,6 +9,7 @@
 
 class ezpRestOauthAuthenticationStyle implements ezpRestAuthenticationStyle
 {
+    // @TODO auth vars should probably be shared internally here.
     public function setup( ezcMvcRequest $request )
     {
         // Setup for testing credentials
@@ -16,19 +17,6 @@ class ezpRestOauthAuthenticationStyle implements ezpRestAuthenticationStyle
         // Fail if too many components are required (according to spec, later)
         // Validate components
 
-        // Fetch and validate token for validity and optionally scope.
-        // Either let teh request pass, or immediately bail with 401.
-        // Section 5.2.1 for error handling.
-        //
-        // invalid_request missing required params -> 400
-        //
-        // invalid_token Expired token which cannot be refreshed -> 401
-        //
-        // expired_token Token has expired -> 401
-        //
-        // insufficient_scope The requested scope is outside scope associated with token -> 403
-        //
-        // Do not include error info for requests which did not contain auth details.ref. 5.2.1
         $logger = ezcLog::getInstance();
         $logger->source = __FUNCTION__;
         $logger->category = "oauth";
@@ -36,30 +24,67 @@ class ezpRestOauthAuthenticationStyle implements ezpRestAuthenticationStyle
         $logger->log( "Begin oauth verification", ezcLog::DEBUG );
 
         $token = ezpOauthUtility::getToken( $request );
+        $cred = new ezcAuthenticationIdCredentials( $token );
+        $oauthFilter = new ezpOauthFilter();
+
+        $auth = new ezcAuthentication( $cred );
+        $auth->addFilter( $oauthFilter );
+        return $auth;
     }
 
-    public function authenticate( ezcMvcRequest $request )
+    public function authenticate( ezcAuthentication $auth, ezcMvcRequest $request )
     {
-        // Checking for existance of token
-        // $session = ezcPersistentSessionInstance::get();
-        // $fetchedToken = $session->load( 'ezpRestToken', $token );
-        // $logger->log( $fetchedToken->client_id, ezcLog::DEBUG );
-
-        // We need to catch exceptions here, as exceptions thrown in the RequestFilter
-        // is not caught by MvcTools, so the error controller will not pick them up.
-        try
+        if ( !$auth->run() )
         {
-            // Not valid token
+            // @TODO Current code block is inactive as auth is currently handled
+            // via exceptions rather than via auth status.
+            $request->variables['ezcAuth_redirUrl'] = $request->uri;
+            $request->variables['ezcAuth_reasons'] = $auth->getStatus();
             $request->uri = '/login/oauth';
             return new ezcMvcInternalRedirect( $request );
-
         }
-        catch ( Exception $e )
-        {
-            $request->variables['exception'] = $e;
-            $request->uri = '/api/fatal';
-            return new ezcMvcInternalRedirect( $request );
-        }
+        return;
     }
+
+    /**
+     * Method extracted from MvcAuthenticationTiein
+     *
+     * Checks the status from the authentication run and adds the reasons as
+     * variable to the $result.
+     *
+     * This method uses the information that is set by the
+     * runAuthRequiredFilter() filter to generate an user-readable text of the
+     * found $reasons and sets these as the variable ezcAuth_reasons in
+     * the $result. You can supply your own mapping from status codes to
+     * messages, but a default is provided. Please refer to the Authentication
+     * tutorial for information about status codes.
+     *
+     * @param ezcMvcResult $result
+     * @param array(string) $reasons
+     * @param array(string=>array(int=>string) $errorMap
+     */
+    function processLoginRequired( ezcMvcResult $res, $reasons, $errorMap = null )
+    {
+        $reasonText = array();
+
+        if ( $errorMap === null )
+        {
+            $errorMap = array(
+                'ezpOauthFilter' => array(
+                    ezpOauthFilter::STATUS_TOKEN_INVALID            => 'Token has expired.',
+                    ezpOauthFilter::STATUS_TOKEN_EXPIRED            => 'Token has expired, please refresh it.',
+                    ezpOauthFilter::STATUS_TOKEN_INSUFFICIENT_SCOPE => 'You do have do have sufficient scope to access this resource.',
+                ),
+            );
+        }
+
+        foreach ( $reasons as $line )
+        {
+            list( $key, $value ) = each( $line );
+            $reasonText[] = $errorMap[$key][$value];
+        }
+        $res->variables['ezcAuth_reasons']  = $reasonText;
+    }
+
 }
 ?>

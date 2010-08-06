@@ -17,6 +17,6 @@ interface ezpRestAuthenticationStyle
      *
      * @return void
      */
-    public function authenticate( ezcMvcRequest $request );
+    public function authenticate( ezcAuthentication $auth, ezcMvcRequest $request );
 }
 ?>
