@@ -60,5 +60,24 @@ class ezpRestToken implements ezcPersistentObject
              'scope' => $this->scope,
          );
      }
+
+     /**
+      * Generates a random token.
+      *
+      * Code is adopted from MvcAuthenticationTiein
+      *
+      * @return string The token.
+      */
+     public static function generateToken( $vary )
+     {
+         mt_srand( base_convert( substr( md5( $vary ), 0, 6 ), 36, 10 ) * microtime( true ) );
+         $a = base_convert( mt_rand(), 10, 36 );
+         $b = base_convert( mt_rand(), 10, 36 );
+         $token = substr( $b . $a, 1, 8 );
+         $tokenHash = sha1( $token );
+
+         return $tokenHash;
+     }
+
 }
 ?>
