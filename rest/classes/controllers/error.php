@@ -36,7 +36,7 @@ class ezpRestErrorController extends ezcMvcController
         else if ( $this->exception instanceof ezpOauthRequiredException )
         {
             $result = new ezcMvcResult;
-            $result->status = new ezpOauthRequired( "eZ Publish REST", $this->exception->errorType );
+            $result->status = new ezpOauthRequired( "eZ Publish REST", $this->exception->errorType, $this->exception->getMessage() );
             $result->variables['message'] = $this->exception->getMessage();
             return $result;
         }
