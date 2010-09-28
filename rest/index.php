@@ -32,11 +32,11 @@ function eZUpdateDebugSettings() {}
 
 require_once "access.php";
 
-$access = accessType( $uri,
+$access = eZSiteAccess::match( $uri,
                       eZSys::hostname(),
                       eZSys::serverPort(),
                       eZSys::indexFile() );
-$access = changeAccess( $access );
+$access = eZSiteAccess::change( $access );
 
 // Adding the compat layer for i18n methods, as this is used in some of the
 // datatypes in extensions
