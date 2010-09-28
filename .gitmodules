@@ -1,0 +1,3 @@
+[submodule "ezpublish/extension/rest/ezp_api"]
+	path = ezpublish/extension/rest/ezp_api
+	url = git@github.com:ezsystems/ezp_api.git
