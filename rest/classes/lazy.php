@@ -23,7 +23,42 @@ class ezpRestDbConfig implements ezcBaseConfigurationInitializer
     public static function configureObject( $instance )
     {
         //Ignoring $instance
-        return ezcDbFactory::create( 'pgsql://postgres@localhost/trunkgit' );
+        $dsn = self::lazyDbHelper();
+        return ezcDbFactory::create( $dsn );
+    }
+
+    protected static function lazyDbHelper()
+    {
+        $dbMapping = array( 'ezmysqli' => 'mysql',
+                            'ezmysql' => 'mysql',
+                            'mysql' => 'mysql',
+                            'mysqli' => 'mysql',
+                            'postgresql' => 'pgsql',
+                            'ezpostgresql' => 'pgsql',
+                            'ezoracle' => 'oracle',
+                            'oracle' => 'oracle' );
+
+        $ini = eZINI::instance();
+        list( $dbType, $dbHost, $dbPort, $dbUser, $dbPass, $dbName ) =
+            $ini->variableMulti( 'DatabaseSettings',
+                                 array( 'DatabaseImplementation', 'Server', 'Port',
+                                        'User', 'Password', 'Database',
+                                       )
+                                );
+
+        if ( !isset( $dbMapping[$dbType] ) )
+        {
+            // @TODO: Add a proper exception type here.
+            throw new Exception( "Unknown / unmapped DB type '$dbType'" );
+        }
+
+        $dbType = $dbMapping[$dbType];
+
+        $dsnHost = $dbHost . ( $dbPort != '' ? ":$dbPort" : '' );
+        $dsnAuth = $dbUser . ( $dbPass != '' ? ":$dbPass" : '' );
+        $dsn = "{$dbType}://{$dbUser}:{$dbPass}@{$dsnHost}/{$dbName}";
+
+        return $dsn;
     }
 }
 ezcBaseInit::setCallback( 'ezcInitDatabaseInstance', 'ezpRestDbConfig' );
