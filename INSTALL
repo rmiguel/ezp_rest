@@ -1,0 +1,40 @@
+Setting up the REST layer
+=========================
+
+- The two extension folders need to be placed inside the ez publish extension
+  folder
+
+- Activate extensions and regenerate extension autoload data::
+
+    bin/php/ezpgenerateautoloads.php
+
+- Symlink in the rest bootstrap into the root folder::
+
+    ln -s extension/rest/index_rest.php index_rest.php.
+
+- Insert the database schemas for each extension, currently schemas for mysql,
+  and postgresql are included. They can be found in the following places:
+
+  - ezpublish/extension/oauth/sql/{mysql,postgresql}
+
+  - ezpublish/extension/rest/sql/{mysql,postgresql}
+
+- Create new rewrite rule in your web server config to intercept the desired
+  URLs and forward to this file example::
+
+    RewriteRule ^/api/ /index_rest.php [L]
+
+- An oauth client now needs to be registered in the system, using the
+  interface::
+
+  /oauthadmin/list
+
+- The client subsequently needs to be authorized, with a request to the
+  authorize controller::
+
+  /oauth/authorize
+
+  The format of said request will be documented in the oauth extension.
+
+- The system is ready to be used.
+
