@@ -1,7 +1,7 @@
 Setting up the REST layer
 =========================
 
-- The two extension folders need to be placed inside the ez publish extension
+- The three extension folders need to be placed inside the eZ Publish extension
   folder
 
 - Activate extensions and regenerate extension autoload data::
